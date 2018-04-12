@@ -5,12 +5,30 @@
     <title>Cat Clicker</title>
 </head>
 <body>
-    <ul id="cat-list"></ul>
-    <div id="cat">
+    <ul ></ul>
+    <div>
 
-        <h2 id="cat-name"></h2>
-        <div id="cat-count"></div>
-        <img id="cat-img" src="" alt="cute cat">
+        <h2 data-bind="text: name"></h2>
+        <div data-bind="text: clickCount"></div>
+        <div data-bind="text: clickNickCount"></div>
+        <div data-bind="text: level"></div>
+        <button data-bind="click: incrementNickCounter">Nick Count</button>
+        <table>
+            <thead>
+                <tr><th>Vote for nick names</th><th>index</th><th>click count</th></tr>
+            </thead>
+            <tbody data-bind="foreach: nicknames">
+                <tr>
+                    <td> <button data-bind="click: $parent.nickClicksAdd, text: $data.nick"></button></td>
+                    <!-- <td> <a href="#" data-bind="click: $parent.nickClicksAdd, text: $data.nick"></a></td> -->
+                    <td data-bind="text: $index"></td>
+                    <td data-bind="text: $data.nickClicks"></td>
+                    
+                </tr>
+            </tbody>
+        </table>
+        <img alt="cute cat" data-bind="click: incrementCounter,
+        attr: {src: imgSrc}">
 
     </div>
     <script src="js/lib/knockout-3.2.0.js"></script>
