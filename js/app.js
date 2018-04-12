@@ -25,6 +25,8 @@ var ViewModel = function() {
             }}
         ,self);
 
+      
+
     self.incrementCounter = function() {
         self.clickCount(self.clickCount() + 1);
     };
@@ -71,6 +73,9 @@ var ViewModel = function() {
             {"nick":'Denise',"nickClicks":0}
         ]);
 
+    self.topNickName = ko.computed(function() {
+        return self.nicknames().sort(function (left, right) { return left.nickClicks == right.nickClicks ? 0 : (left.nickClicks < right.nickClicks ? 1 : 0)})[0].nick ;
+    }, self);  
 }
 
 ko.applyBindings(new ViewModel());
