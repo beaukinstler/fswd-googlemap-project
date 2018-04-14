@@ -28,10 +28,17 @@
                 </tr>
             </tbody>
         </table>
+
         <img alt="cute cat" data-bind="click: $parent.incrementCounter,
         attr: {src: imgSrc}">
 
     </div>
+
+    <form data-bind="submit: addNick">
+        Add new nick name to candidates:
+        <input data-bind="value: newNickName" />
+        <button type="submit">Get tweets</button>
+    </form>
     <script src="js/lib/knockout-3.2.0.js"></script>
     <script src="js/app.js"></script>
 </body>

@@ -17,10 +17,10 @@ var ViewModel = function() {
 
 
 
-
-    // this.addNick = function() {
-    //     this.currentCat().nicknames.push({ nick: "newname",nickClicks:0 });
-    // };
+    self.newNickName = ko.observable('enter a new nickname');
+    self.addNick = function() {
+        self.currentCat().nicknames.push({ nick: self.newNickName(),nickClicks:0 });
+    };
 
     // function addAClick(obj){
     //     obj.nickClicks +=1;
