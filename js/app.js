@@ -74,7 +74,8 @@ var Cat = function(){
     ]);
 
     self.topNickName = ko.computed(function() {
-        return self.nicknames().sort(function (left, right) { return left.nickClicks == right.nickClicks ? 0 : (left.nickClicks < right.nickClicks ? 1 : 0)})[0].nick ;
+        var temp = Object.create(self.nicknames())
+        return temp.sort(function (left, right) { return left.nickClicks == right.nickClicks ? 0 : (left.nickClicks < right.nickClicks ? 1 :-1)})[0].nick ;
     }, self);        
 }
 
