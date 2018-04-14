@@ -1,31 +1,58 @@
-var ViewModel = function() {
 
-    var self = this;
-
-    var data = {
+var initialCats = [
+    {
         "clickCount": 0,
-        "name":"",
+        "name":"Tabby",
         "imgSrc":"img/434164568_fea0ad4013_z.jpg",
         "imgAttr":"",
         "nicknames":[
-            {"nick":'Bert',"nickClicks":3},
-            {"nick":'Charles',"nickClicks":0},
-            {"nick":'Denise',"nickClicks":0}
-        ]
+                {"nick":'Bert',"nickClicks":3},
+                {"nick":'Charles',"nickClicks":0},
+                {"nick":'Denise',"nickClicks":0}
+            ]   
+    },
+    {
+        "clickCount": 0,
+        "name":"Flabby",
+        "imgSrc":"img/434164568_fea0ad4013_z.jpg",
+        "imgAttr":"",
+        "nicknames":[
+                {"nick":'Flub',"nickClicks":3},
+                {"nick":'Fan',"nickClicks":0},
+                {"nick":'Fibber',"nickClicks":0}
+            ]
+    }
+]
 
-    };
 
-    self.currentCat =   ko.observable(new Cat(data));
+
+
+var ViewModel = function() {
+
+    var self = this;
+    self.cats = ko.observableArray([]);
+
+    initialCats.forEach(function(catItem){
+        self.cats().push(new Cat(catItem))});
+
+    self.currentCat =   ko.observable(self.cats()[1]);
 
     self.incrementCounter = function() {
         self.currentCat().clickCount(self.currentCat().clickCount() + 1);
     };
+
+    self.setCurrentCat = function(){
+        console.log(self.cats.indexOf(this));
+        self.currentCat(this);
+    }
 
     self.newNickName = ko.observable('enter a new nickname');
 
     self.addNick = function() {
         self.currentCat().nicknames.push({ nick: self.newNickName(),nickClicks:0 });
     };
+
+
 
 };
 
