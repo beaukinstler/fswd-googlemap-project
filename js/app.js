@@ -46,10 +46,10 @@ var ViewModel = function() {
         self.currentCat(this);
     }
 
-    self.newNickName = ko.observable('enter a new nickname');
+    self.filterTerm = ko.observable('enter a new nickname');
 
-    self.addNick = function() {
-        self.currentCat().nicknames.push({ nick: self.newNickName(),nickClicks:0 });
+    self.filterList = function() {
+        self.currentCat().nicknames.push({ nick: self.filterTerm(),nickClicks:0 });
     };
 
 
