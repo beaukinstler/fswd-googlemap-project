@@ -12,7 +12,7 @@
 .filter-menu {
     width: 25%;
     float: left;
-    margin: 10px;
+    border: 10px;
 }
 .main {
     width: 75%;
