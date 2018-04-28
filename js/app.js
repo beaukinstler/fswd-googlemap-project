@@ -5,7 +5,7 @@ var initialCats = [
         "name":"Tabby",
         "imgSrc":"img/434164568_fea0ad4013_z.jpg",
         "imgAttr":"",
-        "nicknames":[
+        "searchterms":[
                 {"nick":'Bert',"nickClicks":3},
                 {"nick":'Charles',"nickClicks":0},
                 {"nick":'Denise',"nickClicks":0}
@@ -16,7 +16,7 @@ var initialCats = [
         "name":"Flabby",
         "imgSrc":"img/434164568_fea0ad4013_z.jpg",
         "imgAttr":"",
-        "nicknames":[
+        "searchterms":[
                 {"nick":'Flub',"nickClicks":3},
                 {"nick":'Fan',"nickClicks":0},
                 {"nick":'Fibber',"nickClicks":0}
@@ -49,7 +49,7 @@ var ViewModel = function() {
     self.filterTerm = ko.observable('enter a new nickname');
 
     self.filterList = function() {
-        self.currentCat().nicknames.push({ nick: self.filterTerm(),nickClicks:0 });
+        self.currentCat().searchterms.push({ nick: self.filterTerm(),nickClicks:0 });
     };
 
 
@@ -86,18 +86,18 @@ var Cat = function(data){
         console.log(this.nick);
         var temp = Object.create(this);
         temp.nickClicks += 1;
-        self.nicknames.replace(this,temp);
+        self.searchterms.replace(this,temp);
     };
 
     self.removeTerm = function () {
         console.log(this.nick);
         var name = this.nick;
-        self.nicknames.remove(function(term) {
+        self.searchterms.remove(function(term) {
             return term.nick == name;
         });
     }
 
-    self.nicknames = ko.observableArray(data.nicknames);
+    self.searchterms = ko.observableArray(data.searchterms);
 
 
        
