@@ -27,9 +27,9 @@
                 <h2 data-bind="text: name"></h2>
                 <div data-bind="text: clickCount"></div>
                 <div data-bind="text: level"></div>
-                <div data-bind="text: topNickName"></div>   
+                <div data-bind="text: topNickName"></div>
 
-    
+
                 <table>
                     <thead>
                         <tr><th>Vote for nick names</th><th>index</th><th>click count</th></tr>
@@ -40,7 +40,7 @@
                             <!-- <td> <a href="#" data-bind="click: $parent.nickClicksAdd, text: $data.nick"></a></td> -->
                             <td data-bind="text: $index"></td>
                             <td data-bind="text: $data.nickClicks"></td>
-                            
+
                         </tr>
                     </tbody>
                 </table>
@@ -58,7 +58,7 @@
             <button type="submit">Get tweets</button>
         </form>
     </div>
-    
+
     <script src="js/lib/knockout-3.2.0.js"></script>
     <script src="js/app.js"></script>
 </body>
