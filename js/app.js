@@ -83,18 +83,24 @@ var Cat = function(data){
         ,self);
 
     self.nickClicksAdd = function(){
+        console.log(this.nick);
         var temp = Object.create(this);
         temp.nickClicks += 1;
         self.nicknames.replace(this,temp);
     };
 
+    self.removeTerm = function () {
+        console.log(this.nick);
+        var name = this.nick;
+        self.nicknames.remove(function(term) {
+            return term.nick == name;
+        });
+    }
+
     self.nicknames = ko.observableArray(data.nicknames);
 
 
-    self.topNickName = ko.computed(function() {
-        var temp = Object.create(self.nicknames())
-        return temp.sort(function (left, right) { return left.nickClicks == right.nickClicks ? 0 : (left.nickClicks < right.nickClicks ? 1 :-1)})[0].nick ;
-    }, self);        
+       
 };
 
 
