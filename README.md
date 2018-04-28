@@ -1,4 +1,13 @@
-ud989-cat-clicker-ko-starter
+Neighborhood map Udacity Project
 ============================
 
-ud989-cat-clicker-ko-starter
+
+
+
+
+
+References - Sites I used to recall syntax and methods
+=================
+* https://www.w3schools.com/css/css_rwd_grid.asp
+    * CSS and responsiveness
+    
