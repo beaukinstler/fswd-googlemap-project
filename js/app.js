@@ -83,7 +83,7 @@ function initMap() {
     //   });
 
     var ViewModel = function() {
-
+        
         var self = this;
         self.savedsearches = ko.observableArray([]);
         self.places = ko.observableArray([]);
@@ -135,6 +135,13 @@ function initMap() {
             map: map
           });
         console.log(markerCenter);
+
+        for (i = 1; i < defaultMarkers.length; i++ ){
+            var marker = new google.maps.Marker({
+                position: self.places()[i].coords(),
+                map: map
+              });
+        }
     
     };
     
