@@ -18,7 +18,17 @@ var initialSearches = [
     }
 ]
 
+var map;
 
+const LAT = 40.7413549, LNG = -73.9980244, ZOOM = 14;
+
+function initMap() {
+    // Constructor creates a new map - only center and zoom are required.
+    map = new google.maps.Map(document.getElementById('mapDiv'), {
+      center: {lat: LAT, lng: LNG},
+      zoom: ZOOM
+    });
+}
 
 
 var ViewModel = function() {
@@ -101,4 +111,8 @@ var Search = function(data){
 
 
 ko.applyBindings(new ViewModel());
+
+
+
+
 
