@@ -13,7 +13,7 @@
 
     <div class="flex-container">
         <div class="filter-menu">
-            <h2>Names</h2>
+            <h2>Saved Searches</h2>
             <div data-bind="foreach: savedsearches">
                 <ul>
                     <li data-bind="click: $parent.setCurrentSearch, text: $data.name">
@@ -24,8 +24,11 @@
         </div>
         <div class="main">
             <div data-bind="with: currentSearch">
-                <h2 data-bind="text: name"></h2>
-                
+                <div id="savedSearchInfo">
+                    <h2 data-bind="text: name"></h2>
+                    <h4>Search String:</h4>
+                    <div data-bind="text: searchTermString"></div>
+                </div>
                 <table>
                     <thead>
                         <tr><th>Search Terms</th></tr>
@@ -36,6 +39,9 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
+            <div id="mapDiv">
+                <img src="img/22252709_010df3379e_z.jpg">
             </div>
         </div>
     </div>

@@ -29,21 +29,22 @@ var ViewModel = function() {
     initialSearches.forEach(function(SearchItem){
         self.savedsearches().push(new Search(SearchItem))});
 
-    self.currentSearch =   ko.observable(self.savedsearches()[1]);
+    self.currentSearch =   ko.observable(self.savedsearches()[0]);
 
-    self.incrementCounter = function() {
-        self.currentSearch().clickCount(self.currentSearch().clickCount() + 1);
-    };
+    // self.incrementCounter = function() {
+    //     self.currentSearch().clickCount(self.currentSearch().clickCount() + 1);
+    // };
 
     self.setCurrentSearch = function(){
         console.log(self.savedsearches.indexOf(this));
         self.currentSearch(this);
     }
 
-    self.filterTerm = ko.observable('enter a new nickname');
+    self.filterTerm = ko.observable('');
 
     self.filterList = function() {
         self.currentSearch().searchterms.push({ nick: self.filterTerm(),nickClicks:0 });
+
     };
 
 
@@ -64,7 +65,8 @@ var Search = function(data){
     // };
 
     self.removeTerm = function () {
-        console.log(this.nick);
+        // console.log(this.nick);
+        // console.log(self.searchTermString());
         var name = this.nick;
         self.searchterms.remove(function(term) {
             return term.nick == name;
@@ -73,6 +75,26 @@ var Search = function(data){
 
     self.searchterms = ko.observableArray(data.searchterms);
 
+    // self.searchTermString = function () {
+    //     // var temp = Object.create(self);
+    //     var result = "temp";
+    //     for (i=0;i<self.searchterms().length; i++){
+    //         result += self.searchterms()[i].nick;
+    //     }
+    //     return result;
+    // }
+
+    self.searchTermString = ko.computed(
+        function(){
+            var result = "";
+            for (i=0;i<self.searchterms().length; i++){
+                result += self.searchterms()[i].nick;
+                // console.log(self.searchterms()[i].nick);
+                if (i+1 < self.searchterms().length){result += "+"};
+            }
+            return result;    
+        }
+    )
 
        
 };
