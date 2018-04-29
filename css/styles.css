@@ -1,8 +1,11 @@
+* {
+    box-sizing: border-box;
+}
 
+div {
+    padding: 6px;
+}
 
-    * {
-        box-sizing: border-box;
-    }
 .header {
     border: 2px;
     padding: 15px;
@@ -12,7 +15,8 @@
 .filter-menu {
     width: 25%;
     float: left;
-    border: 10px;
+    border: 1px;
+    padding: 1px;
 }
 .main {
     width: 75%;
@@ -24,13 +28,20 @@
     flex-flow: row wrap;
   }
 
+#savedSearchInfo {
+    background-color: black;
+    color: lightslategray;
+
+}
+
+
 
 
   @media only screen and (max-width: 500px) {
 
     .flex-container{
         display: flex;
-        flex-wrap: wrap;
+        flex-wrap: wrap-reverse;
     }
     .main {
         width: 100%;
@@ -40,6 +51,7 @@
         width: 100%;
         float: left;
         margin: 10px;
+        text-align: left;
     }
 
 
