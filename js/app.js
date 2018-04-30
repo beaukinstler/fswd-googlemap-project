@@ -21,7 +21,7 @@ var initialSearches = [
 var defaultMarkers = [
     {
         "addressString": "",
-        "name": "marker1",
+        "name": "Bert",
         "lat": 40.8,
         "lng": -73.9980300
     },
@@ -138,7 +138,7 @@ function initMap() {
         var markerCenter = new google.maps.Marker({
             position: center,
             map: map,
-            name: name
+            name: "Center Marker"
           });
         console.log(markerCenter);
         markers.push(markerCenter);
