@@ -77,10 +77,6 @@ function initMap() {
       zoom: ZOOM
     });
 
-    // var marker = new google.maps.Marker({
-    //     position: center,
-    //     map: map
-    //   });
 
     var ViewModel = function() {
         // var markers = ko.observableArray();
@@ -133,7 +129,6 @@ function initMap() {
 
         // test filtering the marker list
         self.removeTest = function(){
-            console.log(self.markers());
             self.markers.remove( function (item) { return item.name != "Bert"});
         };
 
@@ -148,6 +143,11 @@ function initMap() {
             self.removeTest();
         };
 
+        self.openInfoWindow = function(){
+            
+            placeInfoWindow(this, infowindow)
+        };
+
         var center = self.places()[0].coords();
         var name = self.places()[0].name();
         var markerCenter = new google.maps.Marker({
@@ -158,9 +158,10 @@ function initMap() {
         console.log(markerCenter);
         self.markers().push(markerCenter);
         // Open an infowindow
-        markerCenter.addListener('click', function() {
-            placeInfoWindow(this, infowindow);
-        });
+        // 
+        markerCenter.addListener('click', self.openInfoWindow );
+        self.markers().push(markerCenter);
+
         bounds.extend(self.markers()[0].position);
         setDefaultMarkers();
         map.fitBounds(bounds);

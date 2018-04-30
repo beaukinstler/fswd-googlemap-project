@@ -25,7 +25,7 @@
             <h2>Marker List</h2>
             <div data-bind="foreach: markers">
                 <ul>
-                    <li data-bind="text: $data.name">
+                    <li data-bind="click: $parent.openInfoWindow, text: $data.name">
 
                     </li>
                 </ul>
