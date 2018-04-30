@@ -83,8 +83,9 @@ function initMap() {
     //   });
 
     var ViewModel = function() {
-        
+        var markers = [];
         var self = this;
+        var bounds = new google.maps.LatLngBounds();
         self.savedsearches = ko.observableArray([]);
         self.places = ko.observableArray([]);
     
@@ -135,13 +136,29 @@ function initMap() {
             map: map
           });
         console.log(markerCenter);
-
+        markers.push(markerCenter);
+        // Open an infowindow
+        markerCenter.addListener('click', function() {
+          // TODO Add function to open an info window and all it here with `this`
+        });
+        bounds.extend(markers[0].position);
         for (i = 1; i < defaultMarkers.length; i++ ){
             var marker = new google.maps.Marker({
                 position: self.places()[i].coords(),
                 map: map
               });
+
+            // push marker onto the markers array
+            markers.push(markerCenter);
+            markers.push(marker);
+            // Open an infowindow
+            marker.addListener('click', function() {
+          // TODO Add function to open an info window and all it here with `this`
+            });
+
+            bounds.extend(markers[i].position);
         }
+        map.fitBounds(bounds);
     
     };
     
