@@ -83,12 +83,13 @@ function initMap() {
     //   });
 
     var ViewModel = function() {
-        var markers = [];
+        // var markers = ko.observableArray();
+        // var markers = [];
         var self = this;
         var bounds = new google.maps.LatLngBounds();
         var infowindow = new google.maps.InfoWindow();
 
-
+        self.markers = ko.observableArray();
         self.savedsearches = ko.observableArray([]);
         self.places = ko.observableArray([]);
     
@@ -118,21 +119,35 @@ function initMap() {
         
         self.currentSearch =   ko.observable(self.savedsearches()[0]);
     
-        // self.incrementCounter = function() {
-        //     self.currentSearch().clickCount(self.currentSearch().clickCount() + 1);
-        // };
-    
         self.setCurrentSearch = function(){
-            console.log(self.savedsearches.indexOf(this));
+            // console.log(self.savedsearches.indexOf(this));
             self.currentSearch(this);
         }
     
         self.filterTerm = ko.observable('');
     
         self.filterList = function() {
-            self.currentSearch().searchterms.push({ nick: self.filterTerm(),nickClicks:0 });
+            self.currentSearch().searchterms.push({ nick: self.filterTerm() });
     
         };
+
+        // test filtering the marker list
+        self.removeTest = function(){
+            console.log(self.markers());
+            self.markers.remove( function (item) { return item.name != "Bert"});
+        };
+
+        self.filterTest = function(){
+            console.log(self.markers());
+            for (i=0; i < self.markers().length; i++){
+                if (self.markers()[i].name == 'Bert'){
+                    self.markers()[i].setMap(map);
+                }
+                else{ self.markers()[i].setMap(null);}  
+            }
+            self.removeTest();
+        };
+
         var center = self.places()[0].coords();
         var name = self.places()[0].name();
         var markerCenter = new google.maps.Marker({
@@ -141,29 +156,13 @@ function initMap() {
             name: "Center Marker"
           });
         console.log(markerCenter);
-        markers.push(markerCenter);
+        self.markers().push(markerCenter);
         // Open an infowindow
         markerCenter.addListener('click', function() {
             placeInfoWindow(this, infowindow);
         });
-        bounds.extend(markers[0].position);
-        for (i = 1; i < defaultMarkers.length; i++ ){
-            var marker = new google.maps.Marker({
-                position: self.places()[i].coords(),
-                map: map,
-                name: self.places()[i].name()
-              });
-
-            // push marker onto the markers array
-            markers.push(markerCenter);
-            markers.push(marker);
-            // Open an infowindow
-            marker.addListener('click', function() {
-                placeInfoWindow(this, infowindow);
-            });
-
-            bounds.extend(markers[i].position);
-        }
+        bounds.extend(self.markers()[0].position);
+        setDefaultMarkers();
         map.fitBounds(bounds);
         
 
@@ -180,6 +179,49 @@ function initMap() {
             }
             
         }
+
+
+        function setCurrentMarkers(){
+            for (i = 0; i < marker().length; i++ ){
+                var marker = new google.maps.Marker({
+                    position: self.places()[i].coords(),
+                    map: map,
+                    name: self.places()[i].name()
+                  });
+    
+                // push marker onto the markers array
+                self.markers().push(marker);
+                // Open an infowindow
+                marker.addListener('click', function() {
+                    placeInfoWindow(this, infowindow);
+                });
+    
+                bounds.extend(markers()[i].position);
+            }
+        }   
+
+        
+
+        function setDefaultMarkers(){
+            for (i = 1; i < defaultMarkers.length; i++ ){
+                var marker = new google.maps.Marker({
+                    position: self.places()[i].coords(),
+                    map: map,
+                    name: self.places()[i].name()
+                  });
+    
+                // push marker onto the markers array
+                self.markers().push(marker);
+                // Open an infowindow
+                marker.addListener('click', function() {
+                    placeInfoWindow(this, infowindow);
+                });
+    
+                bounds.extend(self.markers()[i].position);
+            }
+        }
+
+
     };
     
     

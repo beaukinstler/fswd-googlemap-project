@@ -22,11 +22,20 @@
                     </li>
                 </ul>
             </div>
+            <h2>Marker List</h2>
+            <div data-bind="foreach: markers">
+                <ul>
+                    <li data-bind="text: $data.name">
+
+                    </li>
+                </ul>
+            </div>
             <div class="form">
                 <form data-bind="submit: filterList">
                         Limit the list:<br>
                         <input data-bind="value: filterTerm" /><br>
                         <button type="submit">Filter List</button>
+                        <button type="submit" data-bind="click: filterTest">Test</button>
                 </form>
             </div>
             <div data-bind="with: currentSearch">
