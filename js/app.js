@@ -86,6 +86,9 @@ function initMap() {
         var markers = [];
         var self = this;
         var bounds = new google.maps.LatLngBounds();
+        var infowindow = new google.maps.InfoWindow();
+
+
         self.savedsearches = ko.observableArray([]);
         self.places = ko.observableArray([]);
     
@@ -131,21 +134,24 @@ function initMap() {
     
         };
         var center = self.places()[0].coords();
+        var name = self.places()[0].name();
         var markerCenter = new google.maps.Marker({
             position: center,
-            map: map
+            map: map,
+            name: name
           });
         console.log(markerCenter);
         markers.push(markerCenter);
         // Open an infowindow
         markerCenter.addListener('click', function() {
-          // TODO Add function to open an info window and all it here with `this`
+            placeInfoWindow(this, infowindow);
         });
         bounds.extend(markers[0].position);
         for (i = 1; i < defaultMarkers.length; i++ ){
             var marker = new google.maps.Marker({
                 position: self.places()[i].coords(),
-                map: map
+                map: map,
+                name: self.places()[i].name()
               });
 
             // push marker onto the markers array
@@ -153,13 +159,27 @@ function initMap() {
             markers.push(marker);
             // Open an infowindow
             marker.addListener('click', function() {
-          // TODO Add function to open an info window and all it here with `this`
+                placeInfoWindow(this, infowindow);
             });
 
             bounds.extend(markers[i].position);
         }
         map.fitBounds(bounds);
-    
+        
+
+        function placeInfoWindow(marker, infowindow ){
+            var content = "<h1>" + marker.name + "</h1>"
+            
+            if (infowindow.marker != marker){
+               infowindow.setContent(content);
+               infowindow.open(map, marker);
+                // TODO add content from thid party API
+                infowindow.addListener('closeclick',function(){
+                    infowindow.setMarker = null;
+                });  
+            }
+            
+        }
     };
     
     
