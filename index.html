@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Neighborhood Map</title>
     <link rel="stylesheet" href="css/styles.css">
 </head>
@@ -23,9 +24,9 @@
                 </ul>
             </div>
             <h2>Marker List</h2>
-            <div data-bind="foreach: markers">
+            <div data-bind="foreach: menuItems">
                 <ul>
-                    <li data-bind="click: $parent.openInfoWindow, text: $data.name">
+                    <li data-bind="click: $parent.openInfoWindow, text: $data.name, visible: $data.visible">
 
                     </li>
                 </ul>

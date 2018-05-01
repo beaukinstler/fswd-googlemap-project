@@ -85,11 +85,12 @@ function initMap() {
         var bounds = new google.maps.LatLngBounds();
         var infowindow = new google.maps.InfoWindow();
 
-        self.markers = ko.observableArray();
+        self.markers = [];
+        self.menuItems = ko.observableArray();
         self.savedsearches = ko.observableArray([]);
         self.places = ko.observableArray([]);
     
-        console.log(map);
+        //console.log(map);
     
         initialSearches.forEach(function(SearchItem){
             self.savedsearches().push(new Search(SearchItem))
@@ -101,8 +102,11 @@ function initMap() {
             "addressString": "",
             "name": "marker0",
             "lat": LAT,
-            "lng": LNG
+            "lng": LNG,
+            // "menuShow": true
         });
+
+        // console.log(center.menuShow());
 
         // load up list of places to tie to markers
         // first push the 'center' object
@@ -111,12 +115,17 @@ function initMap() {
             self.places().push(new Place(tempPlace));
         }); 
 
-        console.log(self.places()[0].coords());
-        
-        self.currentSearch =   ko.observable(self.savedsearches()[0]);
-    
+        //console.log(self.places()[0].menuShow());
+        // self.places()[0].menuShow(false);
+        //console.log(self.places()[0].menuShow());
+        self.currentSearch = ko.observable(self.savedsearches()[0]);
+        // TODO Make a subscribe function that gets search terms with the 
+        // current search changes, to fire off an action to update the 
+        // list of map marks showing in the map and the side list
+
+
         self.setCurrentSearch = function(){
-            // console.log(self.savedsearches.indexOf(this));
+            // //console.log(self.savedsearches.indexOf(this));
             self.currentSearch(this);
         }
     
@@ -132,15 +141,57 @@ function initMap() {
             self.markers.remove( function (item) { return item.name != "Bert"});
         };
 
-        self.filterTest = function(){
-            console.log(self.markers());
-            for (i=0; i < self.markers().length; i++){
-                if (self.markers()[i].name == 'Bert'){
-                    self.markers()[i].setMap(map);
+        self.updateMenu = function(){
+            self.menuItems.removeAll();
+            console.log(self.menuItems());
+            console.log(self.menuItems());
+
+            for (i = 0 ; i < self.markers.length; i++){
+                if (!(self.markers[i].map == null)){
+                    console.log("Found a map marker");
+                    self.menuItems.push(self.markers[i]);
                 }
-                else{ self.markers()[i].setMap(null);}  
             }
-            self.removeTest();
+            console.log(self.menuItems());
+        }
+
+        self.filterTest = function(){
+            // //console.log(self.markers);
+            var searchTerms = self.currentSearch().searchterms();
+            //console.log(searchTerms[0].nick);
+
+            // if there are search terms
+
+            // else show call the a function to load defaults and set map on all markers
+            if (searchTerms.length > 0 ){
+                for (i=0; i < self.markers.length; i++){
+                    self.markers[i].setMap(null);
+                    // self.markers[i].menuShow(false);
+                    self.markers[i].visible = false;
+                    
+                    for (term in searchTerms){
+                        // loop through each search term, and if found set map
+                        if (self.markers[i].name == searchTerms[term].nick){
+                            self.markers[i].setMap(map);
+                            self.markers[i].visible = true;
+                            // self.markers[i].menuShow(true);
+                            // self.markers[i].setMap(map);
+                            // self.markers[i].name = searchTerms[term].nick;
+                        } 
+                    }    
+                }
+            }
+            else {
+                // set all markers to map
+                self.markers.forEach(function(){
+                    this.setMap(map);
+                    
+                })
+            }
+            self.updateMenu()
+            console.log(self.menuItems());
+            // //console.log(self.currentSearch().searchterms());
+            // self.removeTest();
         };
 
         self.openInfoWindow = function(){
@@ -154,15 +205,16 @@ function initMap() {
             position: center,
             map: map,
             name: "Center Marker"
+            // menuShow: self.places()[0].menuShow()
           });
-        console.log(markerCenter);
-        self.markers().push(markerCenter);
+        //console.log(markerCenter);
+        self.markers.push(markerCenter);
         // Open an infowindow
         // 
         markerCenter.addListener('click', self.openInfoWindow );
-        self.markers().push(markerCenter);
+        
 
-        bounds.extend(self.markers()[0].position);
+        bounds.extend(self.markers[0].position);
         setDefaultMarkers();
         map.fitBounds(bounds);
         
@@ -188,16 +240,17 @@ function initMap() {
                     position: self.places()[i].coords(),
                     map: map,
                     name: self.places()[i].name()
+                    // menuShow: self.places()[i].menuShow()
                   });
     
                 // push marker onto the markers array
-                self.markers().push(marker);
+                self.markers.push(marker);
                 // Open an infowindow
                 marker.addListener('click', function() {
                     placeInfoWindow(this, infowindow);
                 });
     
-                bounds.extend(markers()[i].position);
+                bounds.extend(markers[i].position);
             }
         }   
 
@@ -209,17 +262,19 @@ function initMap() {
                     position: self.places()[i].coords(),
                     map: map,
                     name: self.places()[i].name()
+                    // menuShow: self.places()[i].menuShow()
                   });
     
                 // push marker onto the markers array
-                self.markers().push(marker);
+                self.markers.push(marker);
                 // Open an infowindow
                 marker.addListener('click', function() {
                     placeInfoWindow(this, infowindow);
                 });
     
-                bounds.extend(self.markers()[i].position);
+                bounds.extend(self.markers[i].position);
             }
+            self.updateMenu();
         }
 
 
@@ -232,15 +287,15 @@ function initMap() {
         self.name = ko.observable(data.name);
     
         // self.nickClicksAdd = function(){
-        //     console.log(this.nick);
+        //     //console.log(this.nick);
         //     var temp = Object.create(this);
         //     temp.nickClicks += 1;
         //     self.searchterms.replace(this,temp);
         // };
     
         self.removeTerm = function () {
-            // console.log(this.nick);
-            // console.log(self.searchTermString());
+            // //console.log(this.nick);
+            // //console.log(self.searchTermString());
             var name = this.nick;
             self.searchterms.remove(function(term) {
                 return term.nick == name;
@@ -263,7 +318,7 @@ function initMap() {
                 var result = "";
                 for (i=0;i<self.searchterms().length; i++){
                     result += self.searchterms()[i].nick;
-                    // console.log(self.searchterms()[i].nick);
+                    // //console.log(self.searchterms()[i].nick);
                     if (i+1 < self.searchterms().length){result += "+"};
                 }
                 return result;    
@@ -281,12 +336,13 @@ function initMap() {
         self.lat = ko.observable(data.lat);
         self.lng = ko.observable(data.lng);
         self.addressString = ko.observable(data.addressString);
+        // self.menuShow = ko.observable(data.menuShow=true);
 
         self.coords = ko.computed(function(){
             var obj = {}
             obj.lat = self.lat();
             obj.lng = self.lng();
-            console.log(obj);
+            //console.log(obj);
             return obj;
         })
            
