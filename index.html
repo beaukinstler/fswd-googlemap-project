@@ -11,8 +11,13 @@
     <div class="header">
         <h1>Neighborhood map</h1>
     </div>
-
+    <div class="topButtons">
+            <button data-bind="click: showAll">Reset</button>
+            <button data-bind="click: showCurrent">Unhide markers</button>
+            <button data-bind="click: hideAll">Hide markers</button>
+        </div>
     <div class="flex-container">
+
   
         <div class="filter-menu">
             <h2>Saved Searches</h2>
@@ -33,21 +38,18 @@
             </div>
             <div class="form">
                 <form data-bind="submit: filterList">
-                        Limit the list:<br>
+                    Enter search term:<br>
                         <input data-bind="value: filterTerm" /><br>
-                        <button type="submit">Filter List</button>
-                        <button type="submit" data-bind="click: filterTest">Test</button>
+                        <button type="submit">Add to filter</button>
+                        <button type="submit" data-bind="click: applyFilter">Apply filter</button>
                 </form>
             </div>
             <div data-bind="with: currentSearch">
-                <div id="savedSearchInfo">
-                    <h4 data-bind="text: name"></h4>
-                    <h6>Search String:</h6>
-                    <div data-bind="text: searchTermString"></div>
-                </div>
+                <br>
                 <table>
                     <thead>
                         <tr><th>Search Terms</th></tr>
+                        <tr><sm>(click to remove)</sm></tr>
                     </thead>
                     <tbody data-bind="foreach: searchterms">
                         <tr>
@@ -55,6 +57,11 @@
                         </tr>
                     </tbody>
                 </table>
+                <div id="savedSearchInfo">
+                    <h4 data-bind="text: name"></h4>
+                    <h6>Search String:</h6>
+                    <div data-bind="text: searchTermString"></div>
+                </div>
             </div>
         </div>
         <div class="main">

@@ -127,19 +127,53 @@ function initMap() {
         self.setCurrentSearch = function(){
             // //console.log(self.savedsearches.indexOf(this));
             self.currentSearch(this);
+            self.applyFilter();
         }
     
         self.filterTerm = ko.observable('');
-    
+        
+        // Loop through to reset the map and visible property
+        self.showAll = function() {
+            var bounds = new google.maps.LatLngBounds();
+            for (var i = 0; i < self.markers.length; i++) {
+                self.markers[i].setMap(map);
+                self.markers[i].visible = true;
+                bounds.extend(self.markers[i].position);
+            }
+            map.fitBounds(bounds);
+            self.updateMenu();
+        }
+
+        // Loop through to set the map, but don't change visible
+        self.showCurrent = function() {
+            var bounds = new google.maps.LatLngBounds();
+            for (var i = 0; i < self.markers.length; i++) {
+                self.markers[i].setMap(map);
+                bounds.extend(self.markers[i].position);
+            }
+            map.fitBounds(bounds);
+            self.updateMenu();
+            infowindow.setMarker = null;
+        }
+
+        // Loop through and hide all markers.
+        self.hideAll = function() {
+            for (var i = 0; i < self.markers.length; i++) {
+                self.markers[i].setMap(null);
+                infowindow.setMarker = null;
+            }
+            self.updateMenu();
+        }
+
         self.filterList = function() {
             self.currentSearch().searchterms.push({ nick: self.filterTerm() });
     
         };
 
-        // test filtering the marker list
-        self.removeTest = function(){
-            self.markers.remove( function (item) { return item.name != "Bert"});
-        };
+        // // test filtering the marker list
+        // self.removeTest = function(){
+        //     self.markers.remove( function (item) { return item.name != "Bert"});
+        // };
 
         self.updateMenu = function(){
             self.menuItems.removeAll();
@@ -155,7 +189,7 @@ function initMap() {
             console.log(self.menuItems());
         }
 
-        self.filterTest = function(){
+        self.applyFilter = function(){
             // //console.log(self.markers);
             var searchTerms = self.currentSearch().searchterms();
             //console.log(searchTerms[0].nick);
