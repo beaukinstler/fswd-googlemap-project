@@ -3,7 +3,7 @@
 }
 
 .filter-menu {
-    width: 25%;
+    width: 100%;
     float: left;
     border: 1px;
     padding: 1px;
@@ -24,23 +24,23 @@
 #mapDiv {
     bottom:0px;
     height: 100%;
-    left: 362px;
+    left: 300px;
     position: absolute;
     right: 0px;
-    width: 75%;
+    width: 100%;
     float: left;
 
   }
 
 
 
-  @media only screen and (max-width: 500px) {
+  @media only screen and (max-width: 668px) {
 
     #mapDiv {
         height: 400px;
         position: relative;
         float: left;
-        width: 75%;
+        width: 100%;
         left: 0px;
     }
 
