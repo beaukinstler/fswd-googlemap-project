@@ -1,3 +1,43 @@
+var parkStr = "Columbus" ;
+var globalTest;
+
+
+var NYTApi = function(searchTerm){
+
+    //returns an array of objects based on the search term passed
+    var $nytStatus = $('#nytStatus');
+    var $infoWindowDiv = $('#openInfoWindow')
+    console.log("DEBUG data : " +searchTerm);
+    $nytStatus.text('');
+    var returnArr = [];
+    var nyt_url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
+    nyt_url += '?' + $.param({'api-key': "0ed23d00f2c04eac9afd964837eeba1e","q":searchTerm+  " Park",'sort':"newest"});
+    nyt_url += '&fq=glocations:("NEW YORK CITY")';
+    // console.log("DEBUG: nyt_url is " + nyt_url);
+    $.getJSON( nyt_url, function( data ) {
+        // $nytHeaderElem.text("New York Times Articles about " + cityStr );
+        // console.log("DEBUG: type of data: " + typeof data)
+        if ( data.response.docs.length > 0 ){ 
+            $infoWindowDiv.text("Stories from NYT about " + searchTerm);
+            $.each( data.response.docs, function( key, val ) {
+                
+                $infoWindowDiv.append( "<li><a href='" + 
+                                val.web_url + "'>" + 
+                                val.headline.main + 
+                                "</a></li><br>" );  
+                
+            });
+        }
+        else {
+            $infoWindowDiv.text("Couldn't find stories from NYT about " + searchTerm);
+        }
+
+        
+}).fail(function(data){$nytStatus.text("New York Times Articles returned a fail"); });
+// this.nytData = returnArr;
+
+}
+
 
 var initialSearches = [
     {
@@ -21,43 +61,43 @@ var initialSearches = [
 var defaultMarkers = [
     {
         "addressString": "",
-        "name": "Bert",
+        "name": "Dimattina Playground",
         "lat": 40.8,
         "lng": -73.9980300
     },
     {
         "addressString": "",
-        "name": "marker2",
+        "name": "Brooklyn Bridge Park",
         "lat": 40.9,
         "lng": -73.9980300
     },
     {
         "addressString": "",
-        "name": "marker3",
+        "name": "Cadman Plaza Park",
         "lat": 40.6,
         "lng": -73.9980300
     },
     {
         "addressString": "",
-        "name": "marker4",
+        "name": "June Wine Bar",
         "lat": 40.55,
         "lng": -73.9980300
     },
     {
         "addressString": "",
-        "name": "marker5",
+        "name": "Prospect Park",
         "lat": 40.5,
         "lng": -73.9980300
     },
     {
         "addressString": "",
-        "name": "marker6",
+        "name": "Herbert Von King Park",
         "lat": 40.45,
         "lng": -73.9980300
     },
     {
         "addressString": "",
-        "name": "marker7",
+        "name": "June Wine Bar",
         "lat": 40.4,
         "lng": -73.9980300
     }
@@ -71,7 +111,7 @@ function initMap() {
     // Constructor creates a new map - only center and zoom are required.
     // var center = {lat: LAT, lng: LNG};
    
-
+    
     map = new google.maps.Map(document.getElementById('mapDiv'), {
       center: {lat: LAT, lng: LNG},
       zoom: ZOOM
@@ -235,34 +275,65 @@ function initMap() {
 
         var center = self.places()[0].coords();
         var name = self.places()[0].name();
-        var markerCenter = new google.maps.Marker({
-            position: center,
-            map: map,
-            name: "Center Marker"
-            // menuShow: self.places()[0].menuShow()
-          });
-        //console.log(markerCenter);
-        self.markers.push(markerCenter);
+        // var markerCenter = new google.maps.Marker({
+        //     position: center,
+        //     map: map,
+        //     name: "Center Marker"
+        //     // menuShow: self.places()[0].menuShow()
+        //   });
+        // //console.log(markerCenter);
+        // self.markers.push(markerCenter);
         // Open an infowindow
         // 
-        markerCenter.addListener('click', self.openInfoWindow );
+        // markerCenter.addListener('click', self.openInfoWindow );
         
 
-        bounds.extend(self.markers[0].position);
+        // bounds.extend(self.markers[0].position);
         setDefaultMarkers();
         map.fitBounds(bounds);
         
 
         function placeInfoWindow(marker, infowindow ){
-            var content = "<h1>" + marker.name + "</h1>"
+            
+            var content = "<h1>" + marker.name + "</h1>";
+            
+
+            // console.log("DEBUG: About to try to get NYT Data with " + marker.name);
+            // console.dir(nytFunc);
+            // console.log(nytFunc);
+            
+            // // marker.newsData = nytFunc.nytData;
+            // console.log(nytFunc.nytData.length);
+            // var first = marker.news.nytData[0];
+            // console.log(marker.nytData.length);
+            // console.log(nytFunc.length);
+            // console.log(nytData.length);
+            // console.log(first);
+
+            // All of this doesn't work because it's asynchronous
+            // Instead of building the content, the should be a way to 
+            // fill a div once the content is returned.
+            // if (nytFunc.nytData.length > 0){
+            //     console.log("DEBUG: there's data!!!");
+            // }
+            // nytFunc.nytData.forEach(function(article){
+            //     console.log("web:" +article.web_url);
+            //     content += "<a href=" + article.web_url + ">";
+            //     content +=  article.headline.main + "</a>";
+            //     content += "<p class='nytSnippet'>" + article.snippet + "</p>";
+            // });
+            content += "<div id='openInfoWindow'>Waiting for NYT stories...</div>"
             
             if (infowindow.marker != marker){
+               console.log("DEBUG: content = " + content);
                infowindow.setContent(content);
+               
                infowindow.open(map, marker);
-                // TODO add content from thid party API
+                // TODO add content from third party API
                 infowindow.addListener('closeclick',function(){
                     infowindow.setMarker = null;
-                });  
+                });
+                NYTApi(marker.name);
             }
             
         }
@@ -291,7 +362,7 @@ function initMap() {
         
 
         function setDefaultMarkers(){
-            for (i = 1; i < defaultMarkers.length; i++ ){
+            for (i = 0; i < defaultMarkers.length; i++ ){
                 var marker = new google.maps.Marker({
                     position: self.places()[i].coords(),
                     map: map,
@@ -320,13 +391,7 @@ function initMap() {
     
         self.name = ko.observable(data.name);
     
-        // self.nickClicksAdd = function(){
-        //     //console.log(this.nick);
-        //     var temp = Object.create(this);
-        //     temp.nickClicks += 1;
-        //     self.searchterms.replace(this,temp);
-        // };
-    
+   
         self.removeTerm = function () {
             // //console.log(this.nick);
             // //console.log(self.searchTermString());
@@ -357,7 +422,14 @@ function initMap() {
                 }
                 return result;    
             }
-        )
+        );
+
+        self.nameParts = ko.computed(function(){
+            // split the name.  Just in case it's huge, 
+            // that's the the intent, so I'm limiting to 10
+            return self.name().split(" ",10);
+            
+        })
     
            
     };
@@ -366,6 +438,19 @@ function initMap() {
         var self = this;
     
         self.name = ko.observable(data.name);
+        
+        // var nyt_url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
+        // nyt_url += '?' + $.param({'api-key': "0ed23d00f2c04eac9afd964837eeba1e","q":data.name,'sort':"newest"});
+        // console.log(nyt_url);
+        // $.ajax({
+        //     dataType: "jsonp",
+        //     url: nyt_url,
+        //     success: function( response ) {
+        //         console.log( response ); }
+        // });
+
+        // var test = NYTApi(self.name);
+        // console.log(test.length);
     
         self.lat = ko.observable(data.lat);
         self.lng = ko.observable(data.lng);
@@ -379,8 +464,28 @@ function initMap() {
             //console.log(obj);
             return obj;
         })
+
+
+        // self.web_content = ko.computed(function(){
+        //     var content = ""
+        //     content += "<h1>" + self.name + "</h1>";
+        //     content += self.web_url;
+        //     return content;
+        // });
+
+        // function to return split name
+        self.nameParts = ko.computed(function(){
+            // split the name.  Just in case it's huge, 
+            // that's the the intent, so I'm limiting to 10
+            return self.name().split(" ",10);
+            
+        })
            
     };
+
+    // function getNytData(){
+
+    // }
     
     
     ko.applyBindings(new ViewModel());

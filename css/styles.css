@@ -2,6 +2,12 @@
     box-sizing: border-box;
 }
 
+.status {
+    background-color:darkred;
+    color: lightslategray;
+    width: 100%;
+}
+
 .filter-menu {
     width: 100%;
     float: left;
