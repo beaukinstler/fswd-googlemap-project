@@ -17,22 +17,22 @@ var NYTApi = function(searchTerm){
     $.getJSON( nyt_url, function( data ) {
         // $nytHeaderElem.text("New York Times Articles about " + cityStr );
         // console.log("DEBUG: type of data: " + typeof data)
-        if ( data.response.docs.length > 0 ){ 
+        if ( data.response.docs.length > 0 ){
             $infoWindowDiv.text("Stories from NYT about " + searchTerm);
             $.each( data.response.docs, function( key, val ) {
-                
-                $infoWindowDiv.append( "<li><a href='" + 
-                                val.web_url + "'>" + 
-                                val.headline.main + 
-                                "</a></li><br>" );  
-                
+
+                $infoWindowDiv.append( "<li><a href='" +
+                                val.web_url + "'>" +
+                                val.headline.main +
+                                "</a></li><br>" );
+
             });
         }
         else {
             $infoWindowDiv.text("Couldn't find stories from NYT about " + searchTerm);
         }
 
-        
+
 }).fail(function(data){$nytStatus.text("New York Times Articles returned a fail"); });
 // this.nytData = returnArr;
 
@@ -43,17 +43,17 @@ var initialSearches = [
     {
         "name":"Example 1",
         "searchterms":[
-                {"nick":'Bert',"nickClicks":3},
-                {"nick":'Charles',"nickClicks":0},
-                {"nick":'Denise',"nickClicks":0}
-            ]   
+                {"searchText":'Bert',"searchTextClicks":3},
+                {"searchText":'Charles',"searchTextClicks":0},
+                {"searchText":'Denise',"searchTextClicks":0}
+            ]
     },
     {
         "name":"Example 2",
         "searchterms":[
-                {"nick":'Flub',"nickClicks":3},
-                {"nick":'Fan',"nickClicks":0},
-                {"nick":'Fibber',"nickClicks":0}
+                {"searchText":'Flub',"searchTextClicks":3},
+                {"searchText":'Fan',"searchTextClicks":0},
+                {"searchText":'Fibber',"searchTextClicks":0}
             ]
     }
 ]
@@ -110,8 +110,8 @@ const LAT = 40.68, LNG = -73.9980300, ZOOM = 14;
 function initMap() {
     // Constructor creates a new map - only center and zoom are required.
     // var center = {lat: LAT, lng: LNG};
-   
-    
+
+
     map = new google.maps.Map(document.getElementById('mapDiv'), {
       center: {lat: LAT, lng: LNG},
       zoom: ZOOM
@@ -129,9 +129,9 @@ function initMap() {
         self.menuItems = ko.observableArray();
         self.savedsearches = ko.observableArray([]);
         self.places = ko.observableArray([]);
-    
+
         //console.log(map);
-    
+
         initialSearches.forEach(function(SearchItem){
             self.savedsearches().push(new Search(SearchItem))
         });
@@ -153,14 +153,14 @@ function initMap() {
         self.places().push(center);
         defaultMarkers.forEach(function(tempPlace){
             self.places().push(new Place(tempPlace));
-        }); 
+        });
 
         //console.log(self.places()[0].menuShow());
         // self.places()[0].menuShow(false);
         //console.log(self.places()[0].menuShow());
         self.currentSearch = ko.observable(self.savedsearches()[0]);
-        // TODO Make a subscribe function that gets search terms with the 
-        // current search changes, to fire off an action to update the 
+        // TODO Make a subscribe function that gets search terms with the
+        // current search changes, to fire off an action to update the
         // list of map marks showing in the map and the side list
 
 
@@ -169,9 +169,9 @@ function initMap() {
             self.currentSearch(this);
             self.applyFilter();
         }
-    
+
         self.filterTerm = ko.observable('');
-        
+
         // Loop through to reset the map and visible property
         self.showAll = function() {
             var bounds = new google.maps.LatLngBounds();
@@ -206,8 +206,8 @@ function initMap() {
         }
 
         self.filterList = function() {
-            self.currentSearch().searchterms.push({ nick: self.filterTerm() });
-    
+            self.currentSearch().searchterms.push({ searchText: self.filterTerm() });
+
         };
 
         // // test filtering the marker list
@@ -232,7 +232,7 @@ function initMap() {
         self.applyFilter = function(){
             // //console.log(self.markers);
             var searchTerms = self.currentSearch().searchterms();
-            //console.log(searchTerms[0].nick);
+            //console.log(searchTerms[0].searchText);
 
             // if there are search terms
 
@@ -242,24 +242,24 @@ function initMap() {
                     self.markers[i].setMap(null);
                     // self.markers[i].menuShow(false);
                     self.markers[i].visible = false;
-                    
+
                     for (term in searchTerms){
                         // loop through each search term, and if found set map
-                        if (self.markers[i].name == searchTerms[term].nick){
+                        if (self.markers[i].name == searchTerms[term].searchText){
                             self.markers[i].setMap(map);
                             self.markers[i].visible = true;
                             // self.markers[i].menuShow(true);
                             // self.markers[i].setMap(map);
-                            // self.markers[i].name = searchTerms[term].nick;
-                        } 
-                    }    
+                            // self.markers[i].name = searchTerms[term].searchText;
+                        }
+                    }
                 }
             }
             else {
                 // set all markers to map
                 self.markers.forEach(function(){
                     this.setMap(map);
-                    
+
                 })
             }
             self.updateMenu()
@@ -269,7 +269,7 @@ function initMap() {
         };
 
         self.openInfoWindow = function(){
-            
+
             placeInfoWindow(this, infowindow)
         };
 
@@ -284,24 +284,24 @@ function initMap() {
         // //console.log(markerCenter);
         // self.markers.push(markerCenter);
         // Open an infowindow
-        // 
+        //
         // markerCenter.addListener('click', self.openInfoWindow );
-        
+
 
         // bounds.extend(self.markers[0].position);
         setDefaultMarkers();
         map.fitBounds(bounds);
-        
+
 
         function placeInfoWindow(marker, infowindow ){
-            
+
             var content = "<h1>" + marker.name + "</h1>";
-            
+
 
             // console.log("DEBUG: About to try to get NYT Data with " + marker.name);
             // console.dir(nytFunc);
             // console.log(nytFunc);
-            
+
             // // marker.newsData = nytFunc.nytData;
             // console.log(nytFunc.nytData.length);
             // var first = marker.news.nytData[0];
@@ -311,7 +311,7 @@ function initMap() {
             // console.log(first);
 
             // All of this doesn't work because it's asynchronous
-            // Instead of building the content, the should be a way to 
+            // Instead of building the content, the should be a way to
             // fill a div once the content is returned.
             // if (nytFunc.nytData.length > 0){
             //     console.log("DEBUG: there's data!!!");
@@ -323,11 +323,11 @@ function initMap() {
             //     content += "<p class='nytSnippet'>" + article.snippet + "</p>";
             // });
             content += "<div id='openInfoWindow'>Waiting for NYT stories...</div>"
-            
+
             if (infowindow.marker != marker){
                console.log("DEBUG: content = " + content);
                infowindow.setContent(content);
-               
+
                infowindow.open(map, marker);
                 // TODO add content from third party API
                 infowindow.addListener('closeclick',function(){
@@ -335,31 +335,35 @@ function initMap() {
                 });
                 NYTApi(marker.name);
             }
-            
+
         }
 
 
-        function setCurrentMarkers(){
-            for (i = 0; i < marker().length; i++ ){
-                var marker = new google.maps.Marker({
-                    position: self.places()[i].coords(),
-                    map: map,
-                    name: self.places()[i].name()
-                    // menuShow: self.places()[i].menuShow()
-                  });
-    
-                // push marker onto the markers array
-                self.markers.push(marker);
-                // Open an infowindow
-                marker.addListener('click', function() {
-                    placeInfoWindow(this, infowindow);
-                });
-    
-                bounds.extend(markers[i].position);
-            }
-        }   
+        // function setCurrentMarkers(){
+        //     console.log("DEBUG: current search terms:");
+        //     console.log(self.currentSearch().searchterms());
+        //     if (self.currentSearch().searchterms() > 0 ){
+        //         for (i = 0; i < marker().length; i++ ){
+        //             var marker = new google.maps.Marker({
+        //                 position: self.places()[i].coords(),
+        //                 map: map,
+        //                 name: self.places()[i].name()
+        //                 // menuShow: self.places()[i].menuShow()
+        //             });
 
-        
+        //             // push marker onto the markers array
+        //             self.markers.push(marker);
+        //             // Open an infowindow
+        //             marker.addListener('click', function() {
+        //                 placeInfoWindow(this, infowindow);
+        //             });
+
+        //             bounds.extend(markers[i].position);
+        //         }
+        //     }
+        // }
+
+
 
         function setDefaultMarkers(){
             for (i = 0; i < defaultMarkers.length; i++ ){
@@ -369,14 +373,14 @@ function initMap() {
                     name: self.places()[i].name()
                     // menuShow: self.places()[i].menuShow()
                   });
-    
+
                 // push marker onto the markers array
                 self.markers.push(marker);
                 // Open an infowindow
                 marker.addListener('click', function() {
                     placeInfoWindow(this, infowindow);
                 });
-    
+
                 bounds.extend(self.markers[i].position);
             }
             self.updateMenu();
@@ -384,61 +388,83 @@ function initMap() {
 
 
     };
-    
-    
+
+
     var Search = function(data){
         var self = this;
-    
+
         self.name = ko.observable(data.name);
-    
-   
+
+
         self.removeTerm = function () {
-            // //console.log(this.nick);
+            // //console.log(this.searchText);
             // //console.log(self.searchTermString());
-            var name = this.nick;
+            var name = this.searchText;
             self.searchterms.remove(function(term) {
-                return term.nick == name;
+                return term.searchText == name;
             });
         }
-    
+
         self.searchterms = ko.observableArray(data.searchterms);
-    
+
         // self.searchTermString = function () {
         //     // var temp = Object.create(self);
         //     var result = "temp";
         //     for (i=0;i<self.searchterms().length; i++){
-        //         result += self.searchterms()[i].nick;
+        //         result += self.searchterms()[i].searchText;
         //     }
         //     return result;
         // }
-    
+
         self.searchTermString = ko.computed(
             function(){
                 var result = "";
                 for (i=0;i<self.searchterms().length; i++){
-                    result += self.searchterms()[i].nick;
-                    // //console.log(self.searchterms()[i].nick);
+                    result += self.searchterms()[i].searchText;
+                    // //console.log(self.searchterms()[i].searchText);
                     if (i+1 < self.searchterms().length){result += "+"};
                 }
-                return result;    
+                return result;
             }
         );
 
         self.nameParts = ko.computed(function(){
-            // split the name.  Just in case it's huge, 
+            // split the name.  Just in case it's huge,
             // that's the the intent, so I'm limiting to 10
             return self.name().split(" ",10);
-            
+
         })
-    
-           
+
+        self.matchAny =  function(arr){
+            var result = false;
+            // var testArr = [];
+            // tesArr = arr;
+            if (arr.length > 0){
+                console.log(arr);
+                //look for any match in nameParts
+                self.nameParts().forEach(function(part){
+                    console.log("DEBUG: testing part: " + part)
+                    arr.forEach(function(arrElement){
+                        console.log("DEBUG: testing arrElement: " + arrElement)
+                        console.log("DEBUG: match: " + (arrElement.toLowerCase() == part.toLowerCase()))
+                        if (arrElement.toLowerCase() == part.toLowerCase()){
+                           result = true;
+                        }
+                    });
+                });
+            }
+            console.log(result);
+            return result;
+        }
+
+
     };
-    
+
     var Place = function(data){
         var self = this;
-    
+
         self.name = ko.observable(data.name);
-        
+
         // var nyt_url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
         // nyt_url += '?' + $.param({'api-key': "0ed23d00f2c04eac9afd964837eeba1e","q":data.name,'sort':"newest"});
         // console.log(nyt_url);
@@ -451,7 +477,7 @@ function initMap() {
 
         // var test = NYTApi(self.name);
         // console.log(test.length);
-    
+
         self.lat = ko.observable(data.lat);
         self.lng = ko.observable(data.lng);
         self.addressString = ko.observable(data.addressString);
@@ -475,19 +501,19 @@ function initMap() {
 
         // function to return split name
         self.nameParts = ko.computed(function(){
-            // split the name.  Just in case it's huge, 
+            // split the name.  Just in case it's huge,
             // that's the the intent, so I'm limiting to 10
             return self.name().split(" ",10);
-            
+
         })
-           
+
     };
 
     // function getNytData(){
 
     // }
-    
-    
+
+
     ko.applyBindings(new ViewModel());
 }
 
