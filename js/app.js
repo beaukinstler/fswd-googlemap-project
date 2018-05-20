@@ -7,7 +7,7 @@ var NYTApi = function(searchTerm){
     //returns an array of objects based on the search term passed
     var $nytStatus = $('#nytStatus');
     var $infoWindowDiv = $('#openInfoWindow')
-    console.log("DEBUG data : " +searchTerm);
+//console.log("DEBUG data : " +searchTerm);
     $nytStatus.text('');
     var returnArr = [];
     var nyt_url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
@@ -174,8 +174,8 @@ function initMap() {
 
 
         self.setCurrentSearch = function(){
-            console.log("DEBUG: set current search");
-            console.log(self.savedsearches.indexOf(this));
+//console.log("DEBUG: set current search");
+//console.log(self.savedsearches.indexOf(this));
             self.currentSearch(this);
             self.applyFilter();
         }
@@ -227,22 +227,22 @@ function initMap() {
 
         self.updateMenu = function(){
             self.menuItems.removeAll();
-            console.log(self.menuItems());
-            console.log(self.menuItems());
+//console.log(self.menuItems());
+//console.log(self.menuItems());
 
             for (i = 0 ; i < self.markers.length; i++){
                 if (!(self.markers[i].map == null)){
-                    console.log("Found a map marker");
+//console.log("Found a map marker");
                     self.menuItems.push(self.markers[i]);
                 }
             }
-            console.log(self.menuItems());
+//console.log(self.menuItems());
         }
 
         self.debug = function(stuff){
-            console.log("Starting DEBUG function");
-            console.log(self.currentSearch().searchterms());
-            console.log(stuff);
+//console.log("Starting DEBUG function");
+//console.log(self.currentSearch().searchterms());
+//console.log(stuff);
         }
 
         self.searchForMarkerName = function(markerName,searchTerm){
@@ -256,8 +256,8 @@ function initMap() {
         self.applyFilter = function(){
             var searchTerms = self.currentSearch().searchterms();
 
-            console.log("DEBUG: self.currentSearch()");
-            console.log(self.currentSearch());
+//console.log("DEBUG: self.currentSearch()");
+//console.log(self.currentSearch());
 
             // if there are search terms
 
@@ -267,17 +267,17 @@ function initMap() {
                     self.markers[i].setMap(null);
                     // self.markers[i].menuShow(false);
                     self.markers[i].visible = false;
-                    console.log("DEBUG: match marker name: " + self.markers[i].name);
-                    console.log(self.currentSearch().matchAny(self.markers[i].name));
+//console.log("DEBUG: match marker name: " + self.markers[i].name);
+//console.log(self.currentSearch().matchAny(self.markers[i].name));
                     for (term in searchTerms){
                         self.debug(self.currentSearch().searchterms());
                         // loop through each search term, and if found set map
-                        console.log("DEBUG: searchTearms text and marker name broken out into pieces ");
+//console.log("DEBUG: searchTearms text and marker name broken out into pieces ");
 
                         // self.debug(self.markers[i].name);
                         // self.debug(searchTerms[term].searchText);
 
-                        console.log(self.searchForMarkerName(self.markers[i].name,searchTerms[term]));
+//console.log(self.searchForMarkerName(self.markers[i].name,searchTerms[term]));
                         if (self.markers[i].name == searchTerms[term].searchText
                             ||  self.markers[i].name.split(" ",10).indexOf(searchTerms[term].searchText)>-1){
                         // if (self.currentSearch().matchAny(self.markers[i].name)){
@@ -286,8 +286,8 @@ function initMap() {
                             // self.markers[i].menuShow(true);
                             // self.markers[i].setMap(map);
                             // self.markers[i].name = searchTerms[term].searchText;
-                            console.log("DEBUG: Found search term = ");
-                            console.log(searchTerms[term]);
+//console.log("DEBUG: Found search term = ");
+//console.log(searchTerms[term]);
                             
                         }
                     }
@@ -301,7 +301,7 @@ function initMap() {
                 })
             }
             self.updateMenu()
-            console.log(self.menuItems());
+//console.log(self.menuItems());
 
             // self.removeTest();
         };
@@ -363,7 +363,7 @@ function initMap() {
             content += "<div id='openInfoWindow'>Waiting for NYT stories...</div>"
 
             if (infowindow.marker != marker){
-               console.log("DEBUG: content = " + content);
+//console.log("DEBUG: content = " + content);
                infowindow.setContent(content);
 
                infowindow.open(map, marker);
@@ -512,17 +512,17 @@ function initMap() {
 
                 //look for any match in nameParts
                 self.terms().forEach(function(part){
-                    console.log("DEBUG: testing part: " + part)
+//console.log("DEBUG: testing part: " + part)
                     arr.forEach(function(arrElement){
-                        console.log("DEBUG: testing arrElement: " + arrElement)
-                        console.log("DEBUG: match: " + (arrElement.toLowerCase() == part.toLowerCase()))
+//console.log("DEBUG: testing arrElement: " + arrElement)
+//console.log("DEBUG: match: " + (arrElement.toLowerCase() == part.toLowerCase()))
                         if (arrElement.toLowerCase() == part.toLowerCase()){
                            result = true || result;
                         }
                     });
                 });
             }
-            console.log(result);
+//console.log(result);
             return result;
         }
 
