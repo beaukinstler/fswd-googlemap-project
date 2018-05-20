@@ -240,17 +240,17 @@ function initMap() {
         }
 
         self.debug = function(stuff){
-//console.log("Starting DEBUG function");
-//console.log(self.currentSearch().searchterms());
-//console.log(stuff);
+            console.log("Starting DEBUG function");
+            // console.log(self.currentSearch().searchterms());
+            console.log(stuff);
         }
 
         self.searchForMarkerName = function(markerName,searchTerm){
 
             // self.debug(searchTerm.searchText);
             // self.debug(markerName.split(" ",10));
-            // self.debug(markerName.split(" ",10).indexOf("Park"));
-            return markerName.split(" ",10).indexOf((searchTerm.searchText))>-1;
+            // self.debug(markerName.toLowerCase().split(" ",10).indexOf((searchTerm.searchText.toLowerCase()))>-1);
+            return markerName.toLowerCase().split(" ",10).indexOf((searchTerm.searchText.toLowerCase()))>-1;
         }
 
         self.applyFilter = function(){
@@ -270,7 +270,7 @@ function initMap() {
 //console.log("DEBUG: match marker name: " + self.markers[i].name);
 //console.log(self.currentSearch().matchAny(self.markers[i].name));
                     for (term in searchTerms){
-                        self.debug(self.currentSearch().searchterms());
+                        // self.debug(self.currentSearch().searchterms());
                         // loop through each search term, and if found set map
 //console.log("DEBUG: searchTearms text and marker name broken out into pieces ");
 
@@ -279,8 +279,8 @@ function initMap() {
 
 //console.log(self.searchForMarkerName(self.markers[i].name,searchTerms[term]));
                         if (self.markers[i].name == searchTerms[term].searchText
-                            ||  self.markers[i].name.split(" ",10).indexOf(searchTerms[term].searchText)>-1){
-                        // if (self.currentSearch().matchAny(self.markers[i].name)){
+                            ||  self.searchForMarkerName(self.markers[i].name,searchTerms[term])){
+
                             self.markers[i].setMap(map);
                             self.markers[i].visible = true;
                             // self.markers[i].menuShow(true);
