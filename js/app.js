@@ -1,13 +1,17 @@
-var parkStr = "Columbus" ;
-var globalTest;
+
 
 
 var NYTApi = function(searchTerm){
+    // Arg: string - A terms to search the NY Times article API
+    // Required: 
+    //          div with ID nytStatus to return errors to the DOM.
+    //          div in the DOM with ID openInfoWindow to display the results
+    //              of the AJAX data.
 
-    //returns an array of objects based on the search term passed
+    
     var $nytStatus = $('#nytStatus');
     var $infoWindowDiv = $('#openInfoWindow')
-//console.log("DEBUG data : " +searchTerm);
+
     $nytStatus.text('');
     var returnArr = [];
     var nyt_url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
@@ -165,17 +169,11 @@ function initMap() {
         });
 
 
-        // self.places()[0].menuShow(false);
-
         self.currentSearch = ko.observable(self.savedsearches()[0]);
-        // TODO Make a subscribe function that gets search terms with the
-        // current search changes, to fire off an action to update the
-        // list of map marks showing in the map and the side list
-
 
         self.setCurrentSearch = function(){
-//console.log("DEBUG: set current search");
-//console.log(self.savedsearches.indexOf(this));
+
+
             self.currentSearch(this);
             self.applyFilter();
         }
@@ -220,74 +218,49 @@ function initMap() {
 
         };
 
-        // // test filtering the marker list
-        // self.removeTest = function(){
-        //     self.markers.remove( function (item) { return item.name != "Bert"});
-        // };
-
         self.updateMenu = function(){
             self.menuItems.removeAll();
-//console.log(self.menuItems());
-//console.log(self.menuItems());
+
+
 
             for (i = 0 ; i < self.markers.length; i++){
                 if (!(self.markers[i].map == null)){
-//console.log("Found a map marker");
+
                     self.menuItems.push(self.markers[i]);
                 }
             }
-//console.log(self.menuItems());
+
         }
 
         self.debug = function(stuff){
             console.log("Starting DEBUG function");
-            // console.log(self.currentSearch().searchterms());
             console.log(stuff);
         }
 
         self.searchForMarkerName = function(markerName,searchTerm){
 
-            // self.debug(searchTerm.searchText);
-            // self.debug(markerName.split(" ",10));
-            // self.debug(markerName.toLowerCase().split(" ",10).indexOf((searchTerm.searchText.toLowerCase()))>-1);
             return markerName.toLowerCase().split(" ",10).indexOf((searchTerm.searchText.toLowerCase()))>-1;
         }
 
         self.applyFilter = function(){
             var searchTerms = self.currentSearch().searchterms();
 
-//console.log("DEBUG: self.currentSearch()");
-//console.log(self.currentSearch());
-
             // if there are search terms
-
             // else show call the a function to load defaults and set map on all markers
             if (searchTerms.length > 0 ){
                 for (i=0; i < self.markers.length; i++){
                     self.markers[i].setMap(null);
                     // self.markers[i].menuShow(false);
                     self.markers[i].visible = false;
-//console.log("DEBUG: match marker name: " + self.markers[i].name);
-//console.log(self.currentSearch().matchAny(self.markers[i].name));
+
+
                     for (term in searchTerms){
-                        // self.debug(self.currentSearch().searchterms());
-                        // loop through each search term, and if found set map
-//console.log("DEBUG: searchTearms text and marker name broken out into pieces ");
 
-                        // self.debug(self.markers[i].name);
-                        // self.debug(searchTerms[term].searchText);
-
-//console.log(self.searchForMarkerName(self.markers[i].name,searchTerms[term]));
                         if (self.markers[i].name == searchTerms[term].searchText
                             ||  self.searchForMarkerName(self.markers[i].name,searchTerms[term])){
 
                             self.markers[i].setMap(map);
                             self.markers[i].visible = true;
-                            // self.markers[i].menuShow(true);
-                            // self.markers[i].setMap(map);
-                            // self.markers[i].name = searchTerms[term].searchText;
-//console.log("DEBUG: Found search term = ");
-//console.log(searchTerms[term]);
                             
                         }
                     }
@@ -301,7 +274,7 @@ function initMap() {
                 })
             }
             self.updateMenu()
-//console.log(self.menuItems());
+
 
             // self.removeTest();
         };
@@ -313,20 +286,7 @@ function initMap() {
 
         var center = self.places()[0].coords();
         var name = self.places()[0].name();
-        // var markerCenter = new google.maps.Marker({
-        //     position: center,
-        //     map: map,
-        //     name: "Center Marker"
-        //     // menuShow: self.places()[0].menuShow()
-        //   });
 
-        // self.markers.push(markerCenter);
-        // Open an infowindow
-        //
-        // markerCenter.addListener('click', self.openInfoWindow );
-
-
-        // bounds.extend(self.markers[0].position);
         setDefaultMarkers();
         map.fitBounds(bounds);
 
@@ -336,34 +296,10 @@ function initMap() {
             var content = "<h1>" + marker.name + "</h1>";
 
 
-
-
-
-
-            // // marker.newsData = nytFunc.nytData;
-
-            // var first = marker.news.nytData[0];
-
-
-
-
-
-            // All of this doesn't work because it's asynchronous
-            // Instead of building the content, the should be a way to
-            // fill a div once the content is returned.
-            // if (nytFunc.nytData.length > 0){
-
-            // }
-            // nytFunc.nytData.forEach(function(article){
-
-            //     content += "<a href=" + article.web_url + ">";
-            //     content +=  article.headline.main + "</a>";
-            //     content += "<p class='nytSnippet'>" + article.snippet + "</p>";
-            // });
             content += "<div id='openInfoWindow'>Waiting for NYT stories...</div>"
 
             if (infowindow.marker != marker){
-//console.log("DEBUG: content = " + content);
+
                infowindow.setContent(content);
 
                infowindow.open(map, marker);
@@ -375,32 +311,6 @@ function initMap() {
             }
 
         }
-
-
-        // function setCurrentMarkers(){
-
-
-        //     if (self.currentSearch().searchterms() > 0 ){
-        //         for (i = 0; i < marker().length; i++ ){
-        //             var marker = new google.maps.Marker({
-        //                 position: self.places()[i].coords(),
-        //                 map: map,
-        //                 name: self.places()[i].name()
-        //                 // menuShow: self.places()[i].menuShow()
-        //             });
-
-        //             // push marker onto the markers array
-        //             self.markers.push(marker);
-        //             // Open an infowindow
-        //             marker.addListener('click', function() {
-        //                 placeInfoWindow(this, infowindow);
-        //             });
-
-        //             bounds.extend(markers[i].position);
-        //         }
-        //     }
-        // }
-
 
 
         function setDefaultMarkers(){
@@ -445,14 +355,6 @@ function initMap() {
 
         self.searchterms = ko.observableArray(data.searchterms);
 
-        // self.searchTermString = function () {
-        //     // var temp = Object.create(self);
-        //     var result = "temp";
-        //     for (i=0;i<self.searchterms().length; i++){
-        //         result += self.searchterms()[i].searchText;
-        //     }
-        //     return result;
-        // }
 
         self.searchTermString = ko.computed(
             function(){
@@ -479,28 +381,6 @@ function initMap() {
             }));
         
 
-        // self.matchAny =  function(arr){
-        //     var result = false;
-        //     // var testArr = [];
-        //     // tesArr = arr;
-        //     if (arr.length > 0){
-
-        //         //look for any match in nameParts
-        //         self.nameParts().forEach(function(part){
-
-        //             arr.forEach(function(arrElement){
-
-
-        //                 if (arrElement.toLowerCase() == part.toLowerCase()){
-        //                    result = true || result;
-        //                 }
-        //             });
-        //         });
-        //     }
-
-        //     return result;
-        // }
-
         self.matchAny =  function(name){
             var result = false;
             var arr = name.split(" ", 10);
@@ -512,17 +392,17 @@ function initMap() {
 
                 //look for any match in nameParts
                 self.terms().forEach(function(part){
-//console.log("DEBUG: testing part: " + part)
+
                     arr.forEach(function(arrElement){
-//console.log("DEBUG: testing arrElement: " + arrElement)
-//console.log("DEBUG: match: " + (arrElement.toLowerCase() == part.toLowerCase()))
+
+
                         if (arrElement.toLowerCase() == part.toLowerCase()){
                            result = true || result;
                         }
                     });
                 });
             }
-//console.log(result);
+
             return result;
         }
 
@@ -534,23 +414,10 @@ function initMap() {
 
         self.name = ko.observable(data.name);
 
-        // var nyt_url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
-        // nyt_url += '?' + $.param({'api-key': "0ed23d00f2c04eac9afd964837eeba1e","q":data.name,'sort':"newest"});
-
-        // $.ajax({
-        //     dataType: "jsonp",
-        //     url: nyt_url,
-        //     success: function( response ) {
-
-        // });
-
-        // var test = NYTApi(self.name);
-
 
         self.lat = ko.observable(data.lat);
         self.lng = ko.observable(data.lng);
         self.addressString = ko.observable(data.addressString);
-        // self.menuShow = ko.observable(data.menuShow=true);
 
         self.coords = ko.computed(function(){
             var obj = {}
@@ -559,14 +426,6 @@ function initMap() {
 
             return obj;
         })
-
-
-        // self.web_content = ko.computed(function(){
-        //     var content = ""
-        //     content += "<h1>" + self.name + "</h1>";
-        //     content += self.web_url;
-        //     return content;
-        // });
 
         // function to return split name
         self.nameParts = ko.computed(function(){
