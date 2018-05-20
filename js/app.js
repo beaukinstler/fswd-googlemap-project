@@ -43,20 +43,21 @@ var initialSearches = [
     {
         "name":"Example 1",
         "searchterms":[
-                {"searchText":'Bert',"searchTextClicks":3},
-                {"searchText":'Charles',"searchTextClicks":0},
-                {"searchText":'Denise',"searchTextClicks":0}
+                {"searchText":'Bert'},
+                {"searchText":'Charles'},
+                {"searchText":'Denise'}
             ]
     },
     {
         "name":"Example 2",
         "searchterms":[
-                {"searchText":'Flub',"searchTextClicks":3},
-                {"searchText":'Fan',"searchTextClicks":0},
-                {"searchText":'Fibber',"searchTextClicks":0}
+                {"searchText":'Flub'},
+                {"searchText":'Fan'},
+                {"searchText":'Fibber'}
             ]
     }
 ]
+
 
 var defaultMarkers = [
     {
@@ -102,6 +103,14 @@ var defaultMarkers = [
         "lng": -73.9980300
     }
 ]
+
+var namesOfMarkers = defaultMarkers.map(function(markerToConvert) {
+    return markerToConvert['name'];
+  });
+
+var namesOfMarkers = defaultMarkers.map(function(markerToConvert) {
+    return markerToConvert['name'];
+  });
 
 var map;
 
@@ -165,7 +174,8 @@ function initMap() {
 
 
         self.setCurrentSearch = function(){
-            // //console.log(self.savedsearches.indexOf(this));
+            console.log("DEBUG: set current search");
+            console.log(self.savedsearches.indexOf(this));
             self.currentSearch(this);
             self.applyFilter();
         }
@@ -229,10 +239,25 @@ function initMap() {
             console.log(self.menuItems());
         }
 
+        self.debug = function(stuff){
+            console.log("Starting DEBUG function");
+            console.log(self.currentSearch().searchterms());
+            console.log(stuff);
+        }
+
+        self.searchForMarkerName = function(markerName,searchTerm){
+            // console.log("Start of searchForMerkerName");
+            // self.debug(searchTerm.searchText);
+            // self.debug(markerName.split(" ",10));
+            // self.debug(markerName.split(" ",10).indexOf("Park"));
+            return markerName.split(" ",10).indexOf((searchTerm.searchText))>-1;
+        }
+
         self.applyFilter = function(){
-            // //console.log(self.markers);
             var searchTerms = self.currentSearch().searchterms();
-            //console.log(searchTerms[0].searchText);
+
+            console.log("DEBUG: self.currentSearch()");
+            console.log(self.currentSearch());
 
             // if there are search terms
 
@@ -242,15 +267,28 @@ function initMap() {
                     self.markers[i].setMap(null);
                     // self.markers[i].menuShow(false);
                     self.markers[i].visible = false;
-
+                    console.log("DEBUG: match marker name: " + self.markers[i].name);
+                    console.log(self.currentSearch().matchAny(self.markers[i].name));
                     for (term in searchTerms){
+                        self.debug(self.currentSearch().searchterms());
                         // loop through each search term, and if found set map
-                        if (self.markers[i].name == searchTerms[term].searchText){
+                        console.log("DEBUG: searchTearms text and marker name broken out into pieces ");
+                        // console.log(searchTerms[term].searchText);
+                        // self.debug(self.markers[i].name);
+                        // self.debug(searchTerms[term].searchText);
+                        // console.log(self.markers[i].name.split(" ",10));
+                        console.log(self.searchForMarkerName(self.markers[i].name,searchTerms[term]));
+                        if (self.markers[i].name == searchTerms[term].searchText
+                            ||  self.markers[i].name.split(" ",10).indexOf(searchTerms[term].searchText)>-1){
+                        // if (self.currentSearch().matchAny(self.markers[i].name)){
                             self.markers[i].setMap(map);
                             self.markers[i].visible = true;
                             // self.markers[i].menuShow(true);
                             // self.markers[i].setMap(map);
                             // self.markers[i].name = searchTerms[term].searchText;
+                            console.log("DEBUG: Found search term = ");
+                            console.log(searchTerms[term]);
+                            
                         }
                     }
                 }
@@ -433,22 +471,53 @@ function initMap() {
             // that's the the intent, so I'm limiting to 10
             return self.name().split(" ",10);
 
-        })
+        });
 
-        self.matchAny =  function(arr){
+
+        self.terms = ko.observableArray(self.searchterms().map(function(term) {
+                return term['searchText'];
+            }));
+        
+
+        // self.matchAny =  function(arr){
+        //     var result = false;
+        //     // var testArr = [];
+        //     // tesArr = arr;
+        //     if (arr.length > 0){
+        //         console.log(arr);
+        //         //look for any match in nameParts
+        //         self.nameParts().forEach(function(part){
+        //             console.log("DEBUG: testing part: " + part)
+        //             arr.forEach(function(arrElement){
+        //                 console.log("DEBUG: testing arrElement: " + arrElement)
+        //                 console.log("DEBUG: match: " + (arrElement.toLowerCase() == part.toLowerCase()))
+        //                 if (arrElement.toLowerCase() == part.toLowerCase()){
+        //                    result = true || result;
+        //                 }
+        //             });
+        //         });
+        //     }
+        //     console.log(result);
+        //     return result;
+        // }
+
+        self.matchAny =  function(name){
             var result = false;
-            // var testArr = [];
+            var arr = name.split(" ", 10);
+
+            // push the original name as well, in case the search term is the full name
+            arr.push(name);
             // tesArr = arr;
             if (arr.length > 0){
-                console.log(arr);
+                // console.log(arr);
                 //look for any match in nameParts
-                self.nameParts().forEach(function(part){
+                self.terms().forEach(function(part){
                     console.log("DEBUG: testing part: " + part)
                     arr.forEach(function(arrElement){
                         console.log("DEBUG: testing arrElement: " + arrElement)
                         console.log("DEBUG: match: " + (arrElement.toLowerCase() == part.toLowerCase()))
                         if (arrElement.toLowerCase() == part.toLowerCase()){
-                           result = true;
+                           result = true || result;
                         }
                     });
                 });
