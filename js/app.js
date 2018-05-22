@@ -415,6 +415,10 @@ function initMap() {
             self.isVisible(false);
         }
 
+        self.hasTerms = ko.computed(function(){
+            return self.searchterms().length > 0;
+        });
+
     };
 
     var Place = function(data){

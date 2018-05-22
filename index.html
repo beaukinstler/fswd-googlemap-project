@@ -51,10 +51,9 @@
             </div>
             <div data-bind="with: currentSearch">
                 <br>
-                <table>
+                <table data-bind="visible: hasTerms">
                     <thead>
-                        <tr><th>Search Terms</th></tr>
-                        <tr><sm>(click to remove)</sm></tr>
+                        <tr><th>Search Terms (click to remove)</th></tr>
                     </thead>
                     <tbody data-bind="foreach: searchterms">
                         <tr>
@@ -62,11 +61,6 @@
                         </tr>
                     </tbody>
                 </table>
-                <!-- <div id="savedSearchInfo">
-                    <h4 data-bind="text: name"></h4>
-                    <h6>Search String:</h6>
-                    <div data-bind="text: searchTermString"></div>
-                </div> -->
             </div>
         </div>
 
