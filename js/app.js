@@ -215,6 +215,7 @@ function initMap() {
 
         self.filterList = function() {
             self.currentSearch().searchterms.push({ searchText: self.filterTerm() });
+            self.filterTerm(null);
 
         };
 
@@ -243,6 +244,8 @@ function initMap() {
         }
 
         self.applyFilter = function(){
+            infowindow.close();
+
             var searchTerms = self.currentSearch().searchterms();
 
             // if there are search terms
@@ -291,13 +294,12 @@ function initMap() {
         map.fitBounds(bounds);
 
 
+        
         function placeInfoWindow(marker, infowindow ){
 
             var content = "<h1>" + marker.name + "</h1>";
-
-
             content += "<div id='openInfoWindow'>Waiting for NYT stories...</div>"
-
+        
             if (infowindow.marker != marker){
 
                infowindow.setContent(content);
