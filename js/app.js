@@ -45,19 +45,20 @@ var NYTApi = function(searchTerm){
 
 var initialSearches = [
     {
-        "name":"Example 1",
+        "name":"Filter List 1",
         "searchterms":[
-                {"searchText":'Bert'},
-                {"searchText":'Charles'},
-                {"searchText":'Denise'}
+                {"searchText":'Playground'}
+                // {"searchText":'Charles'},
+                // {"searchText":'Denise'}
             ]
     },
     {
-        "name":"Example 2",
+        "name":"Filter List 2",
         "searchterms":[
-                {"searchText":'Flub'},
-                {"searchText":'Fan'},
-                {"searchText":'Fibber'}
+                {"searchText":'Park'}
+                
+                // {"searchText":'Test1'},
+                // {"searchText":'Test2'}
             ]
     }
 ]
@@ -67,44 +68,38 @@ var defaultMarkers = [
     {
         "addressString": "",
         "name": "Dimattina Playground",
-        "lat": 40.8,
-        "lng": -73.9980300
+        "lat": 40.680311,
+        "lng": -74.002211
     },
     {
         "addressString": "",
         "name": "Brooklyn Bridge Park",
-        "lat": 40.9,
-        "lng": -73.9980300
+        "lat": 40.700291,
+        "lng": -73.996699
     },
     {
         "addressString": "",
         "name": "Cadman Plaza Park",
-        "lat": 40.6,
-        "lng": -73.9980300
+        "lat": 40.698476,
+        "lng": -73.990469
     },
     {
         "addressString": "",
-        "name": "June Wine Bar",
-        "lat": 40.55,
-        "lng": -73.9980300
+        "name": "Trinity Park",
+        "lat": 40.699344,
+        "lng": -73.984105
     },
     {
         "addressString": "",
         "name": "Prospect Park",
-        "lat": 40.5,
-        "lng": -73.9980300
+        "lat": 40.660204,
+        "lng": -73.968956
     },
     {
         "addressString": "",
         "name": "Herbert Von King Park",
-        "lat": 40.45,
-        "lng": -73.9980300
-    },
-    {
-        "addressString": "",
-        "name": "June Wine Bar",
-        "lat": 40.4,
-        "lng": -73.9980300
+        "lat": 40.689612,
+        "lng": -73.946732
     }
 ]
 
@@ -150,20 +145,20 @@ function initMap() {
         });
 
 
-        //define the center
-        var center = new Place({
-            "addressString": "",
-            "name": "marker0",
-            "lat": LAT,
-            "lng": LNG,
-            // "menuShow": true
-        });
+        // //define the center
+        // var center = new Place({
+        //     "addressString": "",
+        //     "name": "marker0",
+        //     "lat": LAT,
+        //     "lng": LNG,
+        //     // "menuShow": true
+        // });
 
 
 
         // load up list of places to tie to markers
         // first push the 'center' object
-        self.places().push(center);
+        // self.places().push(center);
         defaultMarkers.forEach(function(tempPlace){
             self.places().push(new Place(tempPlace));
         });
