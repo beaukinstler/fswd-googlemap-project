@@ -168,9 +168,10 @@ function initMap() {
 
         self.setCurrentSearch = function(){
 
-
+            this.makeVisible();
             self.currentSearch(this);
             self.applyFilter();
+            
         }
 
         self.filterTerm = ko.observable('');
@@ -185,6 +186,7 @@ function initMap() {
             }
             map.fitBounds(bounds);
             self.updateMenu();
+            self.currentSearch().makeNotVisible();
         }
 
         // Loop through to set the map, but don't change visible
@@ -340,6 +342,8 @@ function initMap() {
     var Search = function(data){
         var self = this;
 
+        self.isVisible = ko.observable(false);
+
         self.name = ko.observable(data.name);
 
 
@@ -405,6 +409,13 @@ function initMap() {
             return result;
         }
 
+        self.makeVisible = function(){
+            self.isVisible(true);
+        }
+
+        self.makeNotVisible = function(){
+            self.isVisible(false);
+        }
 
     };
 

@@ -20,10 +20,14 @@
 
   
         <div class="filter-menu">
-            <h2>Saved Searches</h2>
+            <h2>Filter Groups</h2>
+            <div id="savedSearchInfo" data-bind="with: currentSearch">
+                <h4 data-bind="text: name, visible: isVisible"></h4>
+            </div>
             <div data-bind="foreach: savedsearches">
                 <ul>
-                    <li data-bind="click: $parent.setCurrentSearch, text: $data.name">
+                    <li>
+                    <a href="#" data-bind="click: $parent.setCurrentSearch, text: $data.name"></a>
 
                     </li>
                 </ul>
@@ -31,7 +35,8 @@
             <h2>Marker List</h2>
             <div data-bind="foreach: menuItems">
                 <ul>
-                    <li data-bind="click: $parent.openInfoWindow, text: $data.name, visible: $data.visible">
+                    <li>
+                        <a href="#" data-bind="click: $parent.openInfoWindow, text: $data.name, visible: $data.visible"></a>
 
                     </li>
                 </ul>
@@ -57,20 +62,20 @@
                         </tr>
                     </tbody>
                 </table>
-                <div id="savedSearchInfo">
+                <!-- <div id="savedSearchInfo">
                     <h4 data-bind="text: name"></h4>
                     <h6>Search String:</h6>
                     <div data-bind="text: searchTermString"></div>
-                </div>
+                </div> -->
             </div>
         </div>
-        <!-- <div class="main"> -->
+
 
 
             <div id="mapDiv">
-                <!-- <img src="img/22252709_010df3379e_z.jpg"> -->
+   
             </div>
-        <!-- </div> -->
+
 
     </div>
 
