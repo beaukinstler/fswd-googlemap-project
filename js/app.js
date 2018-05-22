@@ -3,12 +3,12 @@
 
 var NYTApi = function(searchTerm){
     // Arg: string - A terms to search the NY Times article API
-    // Required: 
+    // Required:
     //          div with ID nytStatus to return errors to the DOM.
     //          div in the DOM with ID openInfoWindow to display the results
     //              of the AJAX data.
 
-    
+
     var $nytStatus = $('#nytStatus');
     var $infoWindowDiv = $('#openInfoWindow')
 
@@ -19,8 +19,6 @@ var NYTApi = function(searchTerm){
     nyt_url += '&fq=glocations:("NEW YORK CITY")';
 
     $.getJSON( nyt_url, function( data ) {
-        // $nytHeaderElem.text("New York Times Articles about " + cityStr );
-
         if ( data.response.docs.length > 0 ){
             $infoWindowDiv.text("Stories from NYT about " + searchTerm);
             $.each( data.response.docs, function( key, val ) {
@@ -37,7 +35,10 @@ var NYTApi = function(searchTerm){
         }
 
 
-}).fail(function(data){$nytStatus.text("New York Times Articles returned a fail"); });
+}).fail(function(data){
+                        $nytStatus.text("New York Times Articles returned a fail");
+                        $infoWindowDiv.text("Connections to the New York Times didn't work. Please try again later.");
+                });
 // this.nytData = returnArr;
 
 }
@@ -56,7 +57,7 @@ var initialSearches = [
         "name":"Filter List 2",
         "searchterms":[
                 {"searchText":'Park'}
-                
+
                 // {"searchText":'Test1'},
                 // {"searchText":'Test2'}
             ]
@@ -171,7 +172,7 @@ function initMap() {
             this.makeVisible();
             self.currentSearch(this);
             self.applyFilter();
-            
+
         }
 
         self.filterTerm = ko.observable('');
@@ -261,17 +262,14 @@ function initMap() {
 
                             self.markers[i].setMap(map);
                             self.markers[i].visible = true;
-                            
+
                         }
                     }
                 }
             }
             else {
-                // set all markers to map
-                self.markers.forEach(function(){
-                    this.setMap(map);
-
-                })
+                // make all markers show
+                self.showAll();
             }
             self.updateMenu()
 
@@ -296,12 +294,12 @@ function initMap() {
                 marker.setAnimation(null);
             },timeout);
         }
-        
+
         function placeInfoWindow(marker, infowindow ){
             bounceMarker(marker,2000);
             var content = "<h1>" + marker.name + "</h1>";
             content += "<div id='openInfoWindow'>Waiting for NYT stories...</div>"
-        
+
             if (infowindow.marker != marker){
                 infowindow.setContent(content);
                 infowindow.open(map, marker);
@@ -382,7 +380,7 @@ function initMap() {
         self.terms = ko.observableArray(self.searchterms().map(function(term) {
                 return term['searchText'];
             }));
-        
+
 
         self.matchAny =  function(name){
             var result = false;
