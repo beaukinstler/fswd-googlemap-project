@@ -293,19 +293,21 @@ function initMap() {
         setDefaultMarkers();
         map.fitBounds(bounds);
 
-
+        function bounceMarker(marker, timeout){
+            marker.setAnimation(google.maps.Animation.BOUNCE);
+            window.setTimeout(function() {
+                marker.setAnimation(null);
+            },timeout);
+        }
         
         function placeInfoWindow(marker, infowindow ){
-
+            bounceMarker(marker,2000);
             var content = "<h1>" + marker.name + "</h1>";
             content += "<div id='openInfoWindow'>Waiting for NYT stories...</div>"
         
             if (infowindow.marker != marker){
-
-               infowindow.setContent(content);
-
-               infowindow.open(map, marker);
-                // TODO add content from third party API
+                infowindow.setContent(content);
+                infowindow.open(map, marker);
                 infowindow.addListener('closeclick',function(){
                     infowindow.setMarker = null;
                 });
