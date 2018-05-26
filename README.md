@@ -22,7 +22,7 @@ Simply download the git repo, either with git or as a zip folder (and unzip it),
 
         $ git clone xxx
 
-Or use this link
+Or use this [link for the zip file](https://github.com/beaukinstler/fswd-googlemap-project/archive/master.zip)
 
 Key Functions
 -------------
