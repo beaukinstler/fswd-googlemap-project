@@ -13,8 +13,16 @@ Here's what it does:
     - The number of filters can be easily adapted to have more, or even add a form for adding more Filter Groups (referred to as Saved Searches in the javascript app.js file)
 
 
+Running the app
+======
 
+Installing
+----------
+Simply download the git repo, either with git or as a zip folder (and unzip it), then open the index.html file in a web browser.
 
+        $ git clone xxx
+
+Or use this link
 
 Key Functions
 -------------
