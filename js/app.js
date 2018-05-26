@@ -199,8 +199,12 @@ function initMap() {
         // Loop through to set the map, but don't change visible
         self.showCurrent = function() {
             var bounds = new google.maps.LatLngBounds();
+
             for (var i = 0; i < self.markers.length; i++) {
-                self.markers[i].setMap(map);
+                if (self.markers[i].visible == true){
+                    self.markers[i].setMap(map);
+                }
+                // keep the bounds using all markers, even invisible
                 bounds.extend(self.markers[i].position);
             }
             map.fitBounds(bounds);
@@ -461,7 +465,7 @@ function initMap() {
         // function to return split name
         self.nameParts = ko.computed(function(){
             // split the name.  Just in case it's huge,
-            // that's the the intent, so I'm limiting to 10
+            // that's not the the intent, so I'm limiting to 10
             return self.name().split(" ",10);
 
         })
