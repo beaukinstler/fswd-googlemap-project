@@ -110,15 +110,19 @@ var defaultMarkers = [
 //     return markerToConvert['name'];
 //   });
 
+
+// Set the primary "map" object.
 var map;
 
+// Vars to set initial map center and zoom level.
 const LAT = 40.68, LNG = -73.9980300, ZOOM = 14;
 
+
+
 function initMap() {
-    // Constructor creates a new map - only center and zoom are required.
-    // var center = {lat: LAT, lng: LNG};
+    // Primary function, used as the callback from Google Maps. 
 
-
+    // Create the google map and link to the html element
     map = new google.maps.Map(document.getElementById('mapDiv'), {
       center: {lat: LAT, lng: LNG},
       zoom: ZOOM
@@ -126,45 +130,48 @@ function initMap() {
 
 
     var ViewModel = function() {
-        // var markers = ko.observableArray();
-        // var markers = [];
+        // Primary ViewModel for the app
+
         var self = this;
+
+        // Create the objects needed by Google Maps
         var bounds = new google.maps.LatLngBounds();
         var infowindow = new google.maps.InfoWindow();
 
+        // Define the variable used by the view model.
+
+        // this will be the list of Google Maps markers stored.
         self.markers = [];
+        
+        // A ko arrary for storing the menu items on the side of the page
         self.menuItems = ko.observableArray();
+
+        // an array to store the saved searches/filter groups on the page
         self.savedsearches = ko.observableArray([]);
+
+        // an array of Places, used to create markers, and will be filled by the
+        // "defaultMarkers" previously defined.
         self.places = ko.observableArray([]);
 
 
-
+        // Load the the pre-set Search objects to store the filter groups
         initialSearches.forEach(function(SearchItem){
             self.savedsearches().push(new Search(SearchItem))
         });
 
-
-        // //define the center
-        // var center = new Place({
-        //     "addressString": "",
-        //     "name": "marker0",
-        //     "lat": LAT,
-        //     "lng": LNG,
-        //     // "menuShow": true
-        // });
-
-
-
-        // load up list of places to tie to markers
+        // Fill the arrary up with a list of places to tie to markers
         // first push the 'center' object
         // self.places().push(center);
         defaultMarkers.forEach(function(tempPlace){
             self.places().push(new Place(tempPlace));
         });
 
-
+        // A holder of the current filter group
+        // Default to the first one on the list of filter groups
         self.currentSearch = ko.observable(self.savedsearches()[0]);
 
+        // Function used by the html to set the Filter Group 
+        // as it's clicked in the DOM.
         self.setCurrentSearch = function(){
 
             this.makeVisible();
@@ -173,6 +180,7 @@ function initMap() {
 
         }
 
+        // Used in the DOM for getting the filter term from a form field.
         self.filterTerm = ko.observable('');
 
         // Loop through to reset the map and visible property
@@ -209,22 +217,26 @@ function initMap() {
             self.updateMenu();
         }
 
+        // Called by the DOM to add a the form field to the list of filter terms
         self.filterList = function() {
             if (self.filterTerm()){
+                // If there is a term, add it to the list.
+                // This will prevent blank items added to the filter
                 self.currentSearch().searchterms.push({ searchText: self.filterTerm() });
                 self.filterTerm(null);
-                // self.applyFilter();
+                // self.applyFilter(); //enable this to not have to press the "Apply filter"
+                //                     //after the term is added to the list
+                
             }
             else{
                 self.currentSearch().makeVisible();
-                // self.applyFilter();  
             }
         };
 
+
         self.updateMenu = function(){
+            // Update the sidebar menu with the the Google Map Markers
             self.menuItems.removeAll();
-
-
 
             for (i = 0 ; i < self.markers.length; i++){
                 if (!(self.markers[i].map == null)){
@@ -235,23 +247,27 @@ function initMap() {
 
         }
 
-        self.debug = function(stuff){
-            console.log("Starting DEBUG function");
-            console.log(stuff);
-        }
+        // self.debug = function(stuff){
+        //     console.log("Starting DEBUG function");
+        //     console.log(stuff);
+        // }
 
         self.searchForMarkerName = function(markerName,searchTerm){
-
+            // Function for finding the search term in the name of a Marker
+            // Convert the Marker name to an array, the find the index of the search term.  
+            // If it's in the name, it will return 0 or greater.
             return markerName.toLowerCase().split(" ",10).indexOf((searchTerm.searchText.toLowerCase()))>-1;
         }
 
         self.applyFilter = function(){
+            // Primary function for altering the GUI with the filtered list.
             infowindow.close();
 
             var searchTerms = self.currentSearch().searchterms();
 
-            // if there are search terms
-            // else show call the a function to load defaults and set map on all markers
+            // If there are search terms, try to use them to alter the Marker visible property
+            // For each marker, set it's map to null and visible to false.
+            // Then test to see if it's name parts match search terms.
             if (searchTerms.length > 0 ){
                 for (i=0; i < self.markers.length; i++){
                     self.markers[i].setMap(null);
@@ -271,24 +287,24 @@ function initMap() {
                     }
                 }
             }
+            // else show call the a function to load defaults and set map on all markers
             else {
                 // make all markers show
                 self.showAll();
                 self.currentSearch().makeVisible();
             }
+
+            // now that markers are updated, update the side bar
             self.updateMenu()
 
-
-            // self.removeTest();
         };
 
         self.openInfoWindow = function(){
-
             placeInfoWindow(this, infowindow)
         };
 
-        var center = self.places()[0].coords();
-        var name = self.places()[0].name();
+        // var center = self.places()[0].coords();
+        // var name = self.places()[0].name();
 
         setDefaultMarkers();
         map.fitBounds(bounds);
@@ -323,7 +339,6 @@ function initMap() {
                     position: self.places()[i].coords(),
                     map: map,
                     name: self.places()[i].name()
-                    // menuShow: self.places()[i].menuShow()
                   });
 
                 // push marker onto the markers array
@@ -343,6 +358,7 @@ function initMap() {
 
 
     var Search = function(data){
+        // Object to store the Search Filter Groups
         var self = this;
 
         self.isVisible = ko.observable(false);
@@ -351,8 +367,6 @@ function initMap() {
 
 
         self.removeTerm = function () {
-
-
             var name = this.searchText;
             self.searchterms.remove(function(term) {
                 return term.searchText == name;
@@ -374,12 +388,10 @@ function initMap() {
             }
         );
 
-        self.nameParts = ko.computed(function(){
-            // split the name.  Just in case it's huge,
-            // that's the the intent, so I'm limiting to 10
-            return self.name().split(" ",10);
+        // self.nameParts = ko.computed(function(){
+        //     return self.name().split(" ",10);
 
-        });
+        // });
 
 
         self.terms = ko.observableArray(self.searchterms().map(function(term) {
@@ -427,6 +439,8 @@ function initMap() {
     };
 
     var Place = function(data){
+        // Object to store details used for Markers, as well as 
+        // side bar menu.
         var self = this;
 
         self.name = ko.observable(data.name);
@@ -454,9 +468,6 @@ function initMap() {
 
     };
 
-    // function getNytData(){
-
-    // }
 
 
     ko.applyBindings(new ViewModel());
