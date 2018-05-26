@@ -24,7 +24,7 @@ var NYTApi = function(searchTerm){
             $.each( data.response.docs, function( key, val ) {
 
                 $infoWindowDiv.append( "<li><a href='" +
-                                val.web_url + "'>" +
+                                val.web_url + "'  target='new'>" +
                                 val.headline.main +
                                 "</a></li><br>" );
 
@@ -48,15 +48,15 @@ var initialSearches = [
     {
         "name":"Filter List 1",
         "searchterms":[
-                {"searchText":'Playground'}
-                // {"searchText":'Charles'},
-                // {"searchText":'Denise'}
+                // {"searchText":'Playground'}
+                // // {"searchText":'Charles'},
+                // // {"searchText":'Denise'}
             ]
     },
     {
         "name":"Filter List 2",
         "searchterms":[
-                {"searchText":'Park'}
+                // {"searchText":'Park'}
 
                 // {"searchText":'Test1'},
                 // {"searchText":'Test2'}
@@ -101,6 +101,12 @@ var defaultMarkers = [
         "name": "Herbert Von King Park",
         "lat": 40.689612,
         "lng": -73.946732
+    },
+    {
+        "addressString": "",
+        "name": "Jacob Riis Park",
+        "lat": 40.567070,
+        "lng": -73.871770
     }
 ]
 
@@ -212,9 +218,15 @@ function initMap() {
         }
 
         self.filterList = function() {
-            self.currentSearch().searchterms.push({ searchText: self.filterTerm() });
-            self.filterTerm(null);
-
+            if (self.filterTerm()){
+                self.currentSearch().searchterms.push({ searchText: self.filterTerm() });
+                self.filterTerm(null);
+                // self.applyFilter();
+            }
+            else{
+                self.currentSearch().makeVisible();
+                // self.applyFilter();  
+            }
         };
 
         self.updateMenu = function(){
@@ -270,6 +282,7 @@ function initMap() {
             else {
                 // make all markers show
                 self.showAll();
+                self.currentSearch().makeVisible();
             }
             self.updateMenu()
 
