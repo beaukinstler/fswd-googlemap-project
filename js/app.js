@@ -143,7 +143,7 @@ function initMap() {
         // this will be the list of Google Maps markers stored.
         self.markers = [];
         
-        // A ko arrary for storing the menu items on the side of the page
+        // A ko array for storing the menu items on the side of the page
         self.menuItems = ko.observableArray();
 
         // an array to store the saved searches/filter groups on the page
@@ -159,7 +159,7 @@ function initMap() {
             self.savedsearches().push(new Search(SearchItem))
         });
 
-        // Fill the arrary up with a list of places to tie to markers
+        // Fill the array up with a list of places to tie to markers
         // first push the 'center' object
         // self.places().push(center);
         defaultMarkers.forEach(function(tempPlace){

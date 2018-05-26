@@ -18,9 +18,12 @@ Running the app
 
 Installing
 ----------
-Simply download the git repo, either with git or as a zip folder (and unzip it), then open the index.html file in a web browser.
+Simply download the git repository, either with git or as a zip folder (and unzip it), then open the `index.html` file in a web browser.
 
-        $ git clone xxx
+Examples:
+
+        $ git clone git@github.com:beaukinstler/fswd-googlemap-project.git
+        $ cd fs-googlemap-project/
 
 Or use this [link for the zip file](https://github.com/beaukinstler/fswd-googlemap-project/archive/master.zip)
 
