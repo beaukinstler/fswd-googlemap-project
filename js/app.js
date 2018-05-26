@@ -39,32 +39,23 @@ var NYTApi = function(searchTerm){
                         $nytStatus.text("New York Times Articles returned a fail");
                         $infoWindowDiv.text("Connections to the New York Times didn't work. Please try again later.");
                 });
-// this.nytData = returnArr;
-
 }
 
-
+// Create the initial search groups.  This list could be added to.
 var initialSearches = [
     {
         "name":"Filter List 1",
         "searchterms":[
-                // {"searchText":'Playground'}
-                // // {"searchText":'Charles'},
-                // // {"searchText":'Denise'}
             ]
     },
     {
         "name":"Filter List 2",
         "searchterms":[
-                // {"searchText":'Park'}
-
-                // {"searchText":'Test1'},
-                // {"searchText":'Test2'}
             ]
     }
 ]
 
-
+// Create the markers used in the App.
 var defaultMarkers = [
     {
         "addressString": "",
@@ -110,13 +101,14 @@ var defaultMarkers = [
     }
 ]
 
-var namesOfMarkers = defaultMarkers.map(function(markerToConvert) {
-    return markerToConvert['name'];
-  });
+// Below are some help
+// var namesOfMarkers = defaultMarkers.map(function(markerToConvert) {
+//     return markerToConvert['name'];
+//   });
 
-var namesOfMarkers = defaultMarkers.map(function(markerToConvert) {
-    return markerToConvert['name'];
-  });
+// var namesOfMarkers = defaultMarkers.map(function(markerToConvert) {
+//     return markerToConvert['name'];
+//   });
 
 var map;
 

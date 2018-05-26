@@ -26,7 +26,7 @@ To use another filter, just click the "Filter List" link, and apply a filter, or
 
 ### Using the Filter
 
-Add an item to the form field, click the "Add to Filter" button.  To apply the filter, click the "Apply filter" button.
+Add an item to the form field, click the "Add to Filter" button.  To apply the filter, click the "Apply filter" button. It filters based on an "OR" logic.  So if any filter in the list is found to match a name, the item is displayed.  It doesn't have to match all filters.
 
 To remove search terms, click the button that represents it, then click the "Apply filter" button again to see the changes on the map.
 
