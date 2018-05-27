@@ -1,4 +1,4 @@
-
+'use strict';
 
 // var newViewModel =  {
 //     nytStatus: ko.observable()
@@ -121,7 +121,10 @@ var map;
 // Vars to set initial map center and zoom level.
 const LAT = 40.68, LNG = -73.9980300, ZOOM = 14;
 
-
+var googleError = function(){
+    console.log("hi");
+    window.alert("There was a problem getting Google Maps APIs info.  Please try again..");
+}
 
 function initMap() {
     // Primary function, used as the callback from Google Maps.
@@ -207,9 +210,10 @@ function initMap() {
             for (var i = 0; i < self.markers.length; i++) {
                 if (self.markers[i].visible == true){
                     self.markers[i].setMap(map);
+                    bounds.extend(self.markers[i].position);
                 }
-                // keep the bounds using all markers, even invisible
-                bounds.extend(self.markers[i].position);
+                // // keep the bounds using all markers, even invisible
+                // bounds.extend(self.markers[i].position);
             }
             map.fitBounds(bounds);
             self.updateMenu();
@@ -246,7 +250,7 @@ function initMap() {
             // Update the sidebar menu with the the Google Map Markers
             self.menuItems.removeAll();
 
-            for (i = 0 ; i < self.markers.length; i++){
+            for (var i = 0 ; i < self.markers.length; i++){
                 if (!(self.markers[i].map == null)){
 
                     self.menuItems.push(self.markers[i]);
@@ -277,13 +281,13 @@ function initMap() {
             // For each marker, set it's map to null and visible to false.
             // Then test to see if it's name parts match search terms.
             if (searchTerms.length > 0 ){
-                for (i=0; i < self.markers.length; i++){
+                for (var i=0; i < self.markers.length; i++){
                     self.markers[i].setMap(null);
                     // self.markers[i].menuShow(false);
                     self.markers[i].visible = false;
 
 
-                    for (term in searchTerms){
+                    for (var term in searchTerms){
 
                         if (self.markers[i].name == searchTerms[term].searchText
                             ||  self.searchForMarkerName(self.markers[i].name,searchTerms[term])){
@@ -349,7 +353,7 @@ function initMap() {
 
 
         function setDefaultMarkers(){
-            for (i = 0; i < defaultMarkers.length; i++ ){
+            for (var i = 0; i < defaultMarkers.length; i++ ){
                 var marker = new google.maps.Marker({
                     position: self.places()[i].coords(),
                     map: map,
@@ -362,9 +366,9 @@ function initMap() {
                 marker.addListener('click', function() {
 
                     placeInfoWindow(this, infowindow);
-                    bounds.extend(self.markers[i].position);
-                });
 
+                });
+                bounds.extend(self.markers[i].position);
 
             }
             self.updateMenu();
@@ -396,7 +400,7 @@ function initMap() {
         self.searchTermString = ko.computed(
             function(){
                 var result = "";
-                for (i=0;i<self.searchterms().length; i++){
+                for (var i=0;i<self.searchterms().length; i++){
                     result += self.searchterms()[i].searchText;
 
                     if (i+1 < self.searchterms().length){result += "+"};
