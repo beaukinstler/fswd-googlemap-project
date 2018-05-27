@@ -140,6 +140,7 @@ function initMap() {
                 bounds.extend(self.markers[i].position);
             }
             map.fitBounds(bounds);
+
             self.updateMenu();
             self.currentSearch().makeNotVisible();
         }
@@ -152,11 +153,14 @@ function initMap() {
                 if (self.markers[i].visible == true){
                     self.markers[i].setMap(map);
                     bounds.extend(self.markers[i].position);
+
                 }
                 // // keep the bounds using all markers, even invisible
                 // bounds.extend(self.markers[i].position);
             }
             map.fitBounds(bounds);
+            // if only one marker, it's too close, so zoom out a bit
+            map.setZoom(map.getZoom()-2);
             self.updateMenu();
             infowindow.setMarker = null;
         }
