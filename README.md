@@ -27,6 +27,10 @@ Examples:
 
 Or use this [link for the zip file](https://github.com/beaukinstler/fswd-googlemap-project/archive/master.zip)
 
+Here's a working example hosted from the master branch on github.
+https://beaukinstler.github.io/fswd-googlemap-project/
+
+
 Key Functions
 -------------
 
