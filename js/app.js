@@ -148,11 +148,12 @@ function initMap() {
         // Loop through to set the map, but don't change visible
         self.showCurrent = function() {
             var bounds = new google.maps.LatLngBounds();
-
+            var markersShown = 0;
             for (var i = 0; i < self.markers.length; i++) {
                 if (self.markers[i].visible == true){
                     self.markers[i].setMap(map);
                     bounds.extend(self.markers[i].position);
+                    markersShown += 1;
 
                 }
                 // // keep the bounds using all markers, even invisible
@@ -160,7 +161,9 @@ function initMap() {
             }
             map.fitBounds(bounds);
             // if only one marker, it's too close, so zoom out a bit
-            map.setZoom(map.getZoom()-2);
+            if (markersShown == 1){
+                map.setZoom(map.getZoom()-3);
+            }
             self.updateMenu();
             infowindow.setMarker = null;
         }
@@ -302,7 +305,7 @@ function initMap() {
                 var marker = new google.maps.Marker({
                     position: self.places()[i].coords(),
                     map: map,
-                    name: self.places()[i].name()
+                    name: self.places()[i].name
                   });
 
                 // push marker onto the markers array
@@ -409,17 +412,17 @@ function initMap() {
         // side bar menu.
         var self = this;
 
-        self.name = ko.observable(data.name);
+        self.name = data.name;
 
 
-        self.lat = ko.observable(data.lat);
-        self.lng = ko.observable(data.lng);
-        self.addressString = ko.observable(data.addressString);
+        self.lat = data.lat;
+        self.lng = data.lng;
+        self.addressString = data.addressString;
 
         self.coords = ko.computed(function(){
             var obj = {}
-            obj.lat = self.lat();
-            obj.lng = self.lng();
+            obj.lat = self.lat;
+            obj.lng = self.lng;
 
             return obj;
         })
@@ -428,7 +431,7 @@ function initMap() {
         self.nameParts = ko.computed(function(){
             // split the name.  Just in case it's huge,
             // that's not the the intent, so I'm limiting to 10
-            return self.name().split(" ",10);
+            return self.name.split(" ",10);
 
         })
 
