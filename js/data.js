@@ -1,5 +1,3 @@
-'use strict'
-
 // Create the initial search groups.  This list could be added to.
 var initialSearches = [
     {
@@ -12,7 +10,7 @@ var initialSearches = [
         "searchterms":[
             ]
     }
-]
+];
 
 // Create the markers used in the App.
 var defaultMarkers = [
@@ -58,4 +56,4 @@ var defaultMarkers = [
         "lat": 40.567070,
         "lng": -73.871770
     }
-]
+];

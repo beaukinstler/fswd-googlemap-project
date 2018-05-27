@@ -1,10 +1,6 @@
-'use strict';
-
-// var newViewModel =  {
-//     nytStatus: ko.observable()
-// }
 
 var NYTApi = function(searchTerm,domErrorDiv,infowindow){
+    'use strict';
     // Arg: string - A terms to search the NY Times article API
     // Required:
     //          div with ID nytStatus to return errors to the DOM.
@@ -43,7 +39,7 @@ var NYTApi = function(searchTerm,domErrorDiv,infowindow){
                         domErrorDiv("New York Times Articles returned a fail");
                         infoWindowDiv(infowindow.getContent() + "Connections to the New York Times didn't work. Please try again later.");
                 });
-}
+};
 
 
 // Below are some help
@@ -65,9 +61,10 @@ const LAT = 40.68, LNG = -73.9980300, ZOOM = 14;
 var googleError = function(){
     console.log("hi");
     window.alert("There was a problem getting Google Maps APIs info.  Please try again..");
-}
+};
 
 function initMap() {
+    'use strict';
     // Primary function, used as the callback from Google Maps.
 
     // Create the google map and link to the html element
@@ -104,7 +101,7 @@ function initMap() {
 
         // Load the the pre-set Search objects to store the filter groups
         initialSearches.forEach(function(SearchItem){
-            self.savedsearches().push(new Search(SearchItem))
+            self.savedsearches().push(new Search(SearchItem));
         });
 
         // Fill the array up with a list of places to tie to markers
@@ -126,7 +123,7 @@ function initMap() {
             self.currentSearch(this);
             self.applyFilter();
 
-        }
+        };
 
         // Used in the DOM for getting the filter term from a form field.
         self.filterTerm = ko.observable('');
@@ -143,7 +140,7 @@ function initMap() {
 
             self.updateMenu();
             self.currentSearch().makeNotVisible();
-        }
+        };
 
         // Loop through to set the map, but don't change visible
         self.showCurrent = function() {
@@ -166,7 +163,7 @@ function initMap() {
             }
             self.updateMenu();
             infowindow.setMarker = null;
-        }
+        };
 
         // Loop through and hide all markers.
         self.hideAll = function() {
@@ -175,7 +172,7 @@ function initMap() {
                 infowindow.setMarker = null;
             }
             self.updateMenu();
-        }
+        };
 
         // Called by the DOM to add a the form field to the list of filter terms
         self.filterList = function() {
@@ -199,13 +196,13 @@ function initMap() {
             self.menuItems.removeAll();
 
             for (var i = 0 ; i < self.markers.length; i++){
-                if (!(self.markers[i].map == null)){
+                if (self.markers[i].map != null){
 
                     self.menuItems.push(self.markers[i]);
                 }
             }
 
-        }
+        };
 
         // self.debug = function(stuff){
         //     console.log("Starting DEBUG function");
@@ -217,7 +214,7 @@ function initMap() {
             // Convert the Marker name to an array, the find the index of the search term.
             // If it's in the name, it will return 0 or greater.
             return markerName.toLowerCase().split(" ",10).indexOf((searchTerm.searchText.toLowerCase()))>-1;
-        }
+        };
 
         self.applyFilter = function(){
             // Primary function for altering the GUI with the filtered list.
@@ -237,8 +234,7 @@ function initMap() {
 
                     for (var term in searchTerms){
 
-                        if (self.markers[i].name == searchTerms[term].searchText
-                            ||  self.searchForMarkerName(self.markers[i].name,searchTerms[term])){
+                        if (self.markers[i].name == searchTerms[term].searchText || self.searchForMarkerName(self.markers[i].name,searchTerms[term])){
 
                             self.markers[i].setMap(map);
                             self.markers[i].visible = true;
@@ -255,7 +251,7 @@ function initMap() {
             }
 
             // now that markers are updated, update the side bar
-            self.updateMenu()
+            self.updateMenu();
 
         };
         self.infoWindowDiv = ko.observable();
@@ -282,7 +278,7 @@ function initMap() {
         // self.nytStatus = ko.observable();
         function placeInfoWindow(marker, infowindow ){
             map.setCenter(marker.getPosition());
-            map.panBy(0,-90)
+            map.panBy(0,-90);
             bounceMarker(marker,2000);
             var content = "<h1>" + marker.name + "</h1>";
             // content += "";
@@ -340,7 +336,7 @@ function initMap() {
             self.searchterms.remove(function(term) {
                 return term.searchText == name;
             });
-        }
+        };
 
         self.searchterms = ko.observableArray(data.searchterms);
 
@@ -351,7 +347,7 @@ function initMap() {
                 for (var i=0;i<self.searchterms().length; i++){
                     result += self.searchterms()[i].searchText;
 
-                    if (i+1 < self.searchterms().length){result += "+"};
+                    if (i+1 < self.searchterms().length){result += "+";}
                 }
                 return result;
             }
@@ -364,7 +360,7 @@ function initMap() {
 
 
         self.terms = ko.observableArray(self.searchterms().map(function(term) {
-                return term['searchText'];
+                return term.searchText;
             }));
 
 
@@ -391,15 +387,15 @@ function initMap() {
             }
 
             return result;
-        }
+        };
 
         self.makeVisible = function(){
             self.isVisible(true);
-        }
+        };
 
         self.makeNotVisible = function(){
             self.isVisible(false);
-        }
+        };
 
         self.hasTerms = ko.computed(function(){
             return self.searchterms().length > 0;
@@ -420,12 +416,12 @@ function initMap() {
         self.addressString = data.addressString;
 
         self.coords = ko.computed(function(){
-            var obj = {}
+            var obj = {};
             obj.lat = self.lat;
             obj.lng = self.lng;
 
             return obj;
-        })
+        });
 
         // function to return split name
         self.nameParts = ko.computed(function(){
@@ -433,7 +429,7 @@ function initMap() {
             // that's not the the intent, so I'm limiting to 10
             return self.name.split(" ",10);
 
-        })
+        });
 
     };
 
