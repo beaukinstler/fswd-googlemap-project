@@ -329,7 +329,8 @@ function initMap() {
         // self.infoWindowDiv = ko.observable();
         // self.nytStatus = ko.observable();
         function placeInfoWindow(marker, infowindow ){
-
+            map.setCenter(marker.getPosition());
+            map.panBy(0,-90)
             bounceMarker(marker,2000);
             var content = "<h1>" + marker.name + "</h1>";
             // content += "";
@@ -359,10 +360,12 @@ function initMap() {
                 self.markers.push(marker);
                 // Open an infowindow
                 marker.addListener('click', function() {
+
                     placeInfoWindow(this, infowindow);
+                    bounds.extend(self.markers[i].position);
                 });
 
-                bounds.extend(self.markers[i].position);
+
             }
             self.updateMenu();
         }
