@@ -21,13 +21,13 @@
     flex-flow: row wrap;
   }
 
-#savedSearchInfo {
+.savedSearchInfo {
     color: darkslategrey;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
 
 }
 
-#mapDiv {
+.mapDiv {
     bottom:0px;
     height: 100%;
     left: 300px;
@@ -42,7 +42,7 @@
 
   @media only screen and (max-width: 668px) {
 
-    #mapDiv {
+    .mapDiv {
         height: 400px;
         position: relative;
         float: left;

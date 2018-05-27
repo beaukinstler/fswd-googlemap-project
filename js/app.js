@@ -71,7 +71,7 @@ function initMap() {
     // Primary function, used as the callback from Google Maps.
 
     // Create the google map and link to the html element
-    map = new google.maps.Map(document.getElementById('mapDiv'), {
+    map = new google.maps.Map(document.getElementsByClassName('mapDiv')[0], {
       center: {lat: LAT, lng: LNG},
       zoom: ZOOM
     });
