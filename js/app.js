@@ -1,7 +1,10 @@
 
 
+// var newViewModel =  {
+//     nytStatus: ko.observable()
+// }
 
-var NYTApi = function(searchTerm){
+var NYTApi = function(searchTerm,domErrorDiv,infowindow){
     // Arg: string - A terms to search the NY Times article API
     // Required:
     //          div with ID nytStatus to return errors to the DOM.
@@ -9,10 +12,11 @@ var NYTApi = function(searchTerm){
     //              of the AJAX data.
 
 
-    var $nytStatus = $('#nytStatus');
-    var $infoWindowDiv = $('#openInfoWindow')
+    // var $nytStatus = $('#nytStatus');
+    // var $infoWindowDiv = $('#openInfoWindow');
 
-    $nytStatus.text('');
+    // $nytStatus.text('');
+    var contentStr = "Stories from NYT about " + searchTerm;
     var returnArr = [];
     var nyt_url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
     nyt_url += '?' + $.param({'api-key': "0ed23d00f2c04eac9afd964837eeba1e","q":searchTerm+  " Park",'sort':"newest"});
@@ -20,24 +24,24 @@ var NYTApi = function(searchTerm){
 
     $.getJSON( nyt_url, function( data ) {
         if ( data.response.docs.length > 0 ){
-            $infoWindowDiv.text("Stories from NYT about " + searchTerm);
+            // $infoWindowDiv.text("Stories from NYT about " + searchTerm);
             $.each( data.response.docs, function( key, val ) {
 
-                $infoWindowDiv.append( "<li><a href='" +
+                contentStr += "<li><a href='" +
                                 val.web_url + "'  target='new'>" +
                                 val.headline.main +
-                                "</a></li><br>" );
+                                "</a></li><br>";
 
             });
+
+            infowindow.setContent("<div class='infowWindowDiv' style='overflow:scroll;max-height:15em'>" + infowindow.getContent() + contentStr + "</div>");
         }
         else {
-            $infoWindowDiv.text("Couldn't find stories from NYT about " + searchTerm);
+            infowindow.setContent(infowindow.getContent() + "Couldn't find stories from NYT about " + searchTerm);
         }
-
-
 }).fail(function(data){
-                        $nytStatus.text("New York Times Articles returned a fail");
-                        $infoWindowDiv.text("Connections to the New York Times didn't work. Please try again later.");
+                        domErrorDiv("New York Times Articles returned a fail");
+                        infoWindowDiv(infowindow.getContent() + "Connections to the New York Times didn't work. Please try again later.");
                 });
 }
 
@@ -120,7 +124,7 @@ const LAT = 40.68, LNG = -73.9980300, ZOOM = 14;
 
 
 function initMap() {
-    // Primary function, used as the callback from Google Maps. 
+    // Primary function, used as the callback from Google Maps.
 
     // Create the google map and link to the html element
     map = new google.maps.Map(document.getElementById('mapDiv'), {
@@ -136,13 +140,13 @@ function initMap() {
 
         // Create the objects needed by Google Maps
         var bounds = new google.maps.LatLngBounds();
-        var infowindow = new google.maps.InfoWindow();
+        var infowindow = new google.maps.InfoWindow({maxWidth:250});
 
         // Define the variable used by the view model.
 
         // this will be the list of Google Maps markers stored.
         self.markers = [];
-        
+
         // A ko array for storing the menu items on the side of the page
         self.menuItems = ko.observableArray();
 
@@ -170,7 +174,7 @@ function initMap() {
         // Default to the first one on the list of filter groups
         self.currentSearch = ko.observable(self.savedsearches()[0]);
 
-        // Function used by the html to set the Filter Group 
+        // Function used by the html to set the Filter Group
         // as it's clicked in the DOM.
         self.setCurrentSearch = function(){
 
@@ -230,7 +234,7 @@ function initMap() {
                 self.filterTerm(null);
                 // self.applyFilter(); //enable this to not have to press the "Apply filter"
                 //                     //after the term is added to the list
-                
+
             }
             else{
                 self.currentSearch().makeVisible();
@@ -258,7 +262,7 @@ function initMap() {
 
         self.searchForMarkerName = function(markerName,searchTerm){
             // Function for finding the search term in the name of a Marker
-            // Convert the Marker name to an array, the find the index of the search term.  
+            // Convert the Marker name to an array, the find the index of the search term.
             // If it's in the name, it will return 0 or greater.
             return markerName.toLowerCase().split(" ",10).indexOf((searchTerm.searchText.toLowerCase()))>-1;
         }
@@ -302,9 +306,11 @@ function initMap() {
             self.updateMenu()
 
         };
-
+        self.infoWindowDiv = ko.observable();
+        self.nytStatus = ko.observable();
         self.openInfoWindow = function(){
-            placeInfoWindow(this, infowindow)
+            placeInfoWindow(this, infowindow);
+
         };
 
         // var center = self.places()[0].coords();
@@ -320,10 +326,13 @@ function initMap() {
             },timeout);
         }
 
+        // self.infoWindowDiv = ko.observable();
+        // self.nytStatus = ko.observable();
         function placeInfoWindow(marker, infowindow ){
+
             bounceMarker(marker,2000);
             var content = "<h1>" + marker.name + "</h1>";
-            content += "<div id='openInfoWindow'>Waiting for NYT stories...</div>"
+            // content += "";
 
             if (infowindow.marker != marker){
                 infowindow.setContent(content);
@@ -331,7 +340,8 @@ function initMap() {
                 infowindow.addListener('closeclick',function(){
                     infowindow.setMarker = null;
                 });
-                NYTApi(marker.name);
+                //NYTApi(marker.name, self.nytStatus,self.infoWindowDiv);
+                NYTApi(marker.name,self.nytStatus,infowindow);
             }
 
         }
@@ -443,7 +453,7 @@ function initMap() {
     };
 
     var Place = function(data){
-        // Object to store details used for Markers, as well as 
+        // Object to store details used for Markers, as well as
         // side bar menu.
         var self = this;
 
@@ -475,6 +485,7 @@ function initMap() {
 
 
     ko.applyBindings(new ViewModel());
+    // ko.applyBindings(new newViewModel());
 }
 
 
