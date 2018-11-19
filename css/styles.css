@@ -2,6 +2,20 @@
     box-sizing: border-box;
 }
 
+.infoWindowDiv {
+    width: 100%;
+}
+
+.infoWindowDiv h1 {
+    width: 100%;
+
+}
+
+.infoWindowDiv p {
+    width: 100%;
+
+}
+
 body {
     margin: 0;
     padding: 0;
