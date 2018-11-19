@@ -30,7 +30,7 @@ var NYTApi = function(searchTerm,domErrorDiv,infowindow){
 
             });
 
-            infowindow.setContent("<div class='infowWindowDiv' style='overflow:scroll;max-height:15em'>" + infowindow.getContent() + contentStr + "</div>");
+            infowindow.setContent("<div class='infoWindowDiv' style='overflow:scroll;max-height:15em'>" + infowindow.getContent() + contentStr + "</div>");
         }
         else {
             infowindow.setContent(infowindow.getContent() + "Couldn't find stories from NYT about " + searchTerm);
