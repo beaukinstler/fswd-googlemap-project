@@ -7,19 +7,20 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+    
     <div class="status" data-bind="text: nytStatus"></div>
-    <div class="header">
+    <div class="header box">
         <h1>Favorite Parks</h1>
     </div>
-    <div class="topButtons">
+    <div class="topButtons box">
             <button data-bind="click: showAll">Reset</button>
             <button data-bind="click: showCurrent">Unhide markers</button>
             <button data-bind="click: hideAll">Hide markers</button>
         </div>
     <div class="flex-container">
 
-  
-        <div class="filter-menu">
+
+        <div class="filter-menu box">
             <h2>Filter Groups</h2>
             <div class="savedSearchInfo" data-bind="with: currentSearch">
                 <h4 data-bind="visible: isVisible">Filter Selected: <span data-bind="text: name"></span></h4>
@@ -82,5 +83,6 @@
     <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlStuyTIUgV0ReMMaiqSJjzacex13tELY&v=3&callback=initMap" onerror="googleError()">
     </script>
+
 </body>
 </html>

@@ -2,6 +2,16 @@
     box-sizing: border-box;
 }
 
+body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.box {
+    padding: 20px;
+}
+
 .status {
     background-color:darkred;
     color: lightslategray;
@@ -12,7 +22,7 @@
     width: 100%;
     float: left;
     border: 1px;
-    padding: 1px;
+    
     text-align: left;
 }
 
@@ -35,13 +45,14 @@
     right: 0px;
     width: 100%;
     float: left;
-
   }
 
 
 
   @media only screen and (max-width: 668px) {
-
+    .box {
+        padding: 1px;
+    }
     .mapDiv {
         height: 400px;
         position: relative;
@@ -60,6 +71,11 @@
         float: left;
         margin: 10px;
         text-align: left;
+        padding: 3px;
+    }
+
+    .header {
+        margin: 0px;
     }
 
     body {
@@ -72,4 +88,12 @@
         font-size: 1.2em;
         text-align: center;
     }
+
+
 }
+
+@media only screen and (max-width: 330px) {
+    body {
+        text-align: left;
+        min-width: 100px;
+    }
